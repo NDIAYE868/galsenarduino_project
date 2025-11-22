@@ -1,0 +1,334 @@
+{% extends "shop/base.html" %}
+{% block title %}Catalogue{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active" aria-current="page">
+  {% if category %}{{ category.name }}{% else %}Catalogue{% endif %}
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <!-- FILTRES & CATÉGORIES -->
+  <div class="col-md-3 mb-4">
+    <div class="sticky-sidebar">
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0"><i class="bi bi-grid"></i> Catégories</h5>
+        </div>
+        <div class="list-group list-group-flush">
+          <li class="list-group-item {% if not category %}active{% endif %}">
+            <a href="{% url 'shop:product_list' %}" class="{% if not category %}text-white{% else %}text-dark{% endif %} text-decoration-none d-flex justify-content-between">
+              <span>Toutes les catégories</span>
+              <span class="badge {% if not category %}bg-warning text-dark{% else %}bg-dark{% endif %}">{{ products.count }}</span>
+            </a>
+          </li>
+          {% for cat in categories %}
+          <li class="list-group-item {% if category == cat %}active{% endif %} category-item">
+            <a href="{% url 'shop:product_list_by_category' slug=cat.slug %}" 
+               class="{% if category == cat %}text-white{% else %}text-dark{% endif %} text-decoration-none d-flex justify-content-between">
+              {{ cat.name }}
+              <span class="badge {% if category == cat %}bg-warning text-dark{% else %}bg-dark{% endif %}">{{ cat.products.count }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtres</h5>
+        </div>
+        <div class="card-body">
+          <form method="get">
+            <div class="mb-3">
+              <label class="form-label fw-bold text-dark">Prix minimum</label>
+              <input type="number" class="form-control" name="price_min" value="{{ request.GET.price_min }}" placeholder="0 FCFA">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold text-dark">Prix maximum</label>
+              <input type="number" class="form-control" name="price_max" value="{{ request.GET.price_max }}" placeholder="50 000 FCFA">
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" name="in_stock" value="1" id="in_stock"
+                     {% if request.GET.in_stock %}checked{% endif %}>
+              <label class="form-check-label fw-bold text-dark" for="in_stock">
+                En stock uniquement
+              </label>
+            </div>
+            <button type="submit" class="btn btn-dark w-100">
+              <i class="bi bi-filter me-2"></i>Appliquer les filtres
+            </button>
+            {% if request.GET.price_min or request.GET.price_max or request.GET.in_stock %}
+            <a href="{% url 'shop:product_list' %}" class="btn btn-outline-dark w-100 mt-2">
+              <i class="bi bi-x-circle me-2"></i>Effacer les filtres
+            </a>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTE PRODUITS -->
+  <div class="col-md-9">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3 mb-0 text-dark fw-bold">
+        {% if category %}{{ category.name }}{% else %}Tous les produits{% endif %}
+        <span class="badge bg-dark ms-2">{{ products.count }}</span>
+      </h1>
+      
+      <!-- Tri des produits -->
+      <div class="dropdown">
+        <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          <i class="bi bi-sort-down me-1"></i>Trier par
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item text-dark" href="?sort=name">Nom A-Z</a></li>
+          <li><a class="dropdown-item text-dark" href="?sort=-name">Nom Z-A</a></li>
+          <li><a class="dropdown-item text-dark" href="?sort=price">Prix croissant</a></li>
+          <li><a class="dropdown-item text-dark" href="?sort=-price">Prix décroissant</a></li>
+          <li><a class="dropdown-item text-dark" href="?sort=-created_at">Nouveautés</a></li>
+        </ul>
+      </div>
+    </div>
+
+    {% if products %}
+    <div class="row g-4">
+      {% for product in products %}
+      <div class="col-6 col-md-6 col-lg-4">
+        <div class="card product-card h-100 border-0 shadow-sm animate-on-scroll">
+          <a href="{% url 'shop:product_detail' slug=product.slug %}">
+            <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title fw-bold text-dark">{{ product.name }}</h5>
+            <p class="card-text small text-muted mb-2">
+              {{ product.short_description|default:product.description|truncatechars:80 }}
+            </p>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="fw-bold text-dark fs-5">{{ product.price }} FCFA</span>
+              {% if product.stock > 0 %}
+              <span class="badge bg-success small"><i class="bi bi-check-circle me-1"></i>En stock</span>
+              {% else %}
+              <span class="badge bg-danger small"><i class="bi bi-x-circle me-1"></i>Rupture</span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="card-footer bg-white border-0 pt-0">
+            <form action="{% url 'shop:cart_add' product.id %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="btn btn-warning w-100 add-to-cart-btn" {% if product.stock == 0 %}disabled{% endif %}>
+                <i class="bi bi-cart-plus me-1"></i> 
+                {% if product.stock > 0 %}Ajouter au panier{% else %}Rupture{% endif %}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav aria-label="Pagination" class="mt-5">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link text-dark" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+            <i class="bi bi-chevron-left"></i> Précédent
+          </a>
+        </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+          <li class="page-item active">
+            <span class="page-link bg-dark border-dark">{{ num }}</span>
+          </li>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <li class="page-item">
+            <a class="page-link text-dark" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+              {{ num }}
+            </a>
+          </li>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link text-dark" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+            Suivant <i class="bi bi-chevron-right"></i>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <div class="text-center py-5 animate-on-scroll">
+      <i class="bi bi-search display-1 text-muted"></i>
+      <h3 class="text-dark mt-3">Aucun produit trouvé</h3>
+      <p class="text-muted">Essayez de modifier vos critères de recherche ou consultez toutes nos catégories</p>
+      <div class="d-flex gap-2 justify-content-center">
+        <a href="{% url 'shop:product_list' %}" class="btn btn-warning">
+          <i class="bi bi-grid me-2"></i>Voir tous les produits
+        </a>
+        <a href="{% url 'shop:home' %}" class="btn btn-outline-dark">
+          <i class="bi bi-house me-2"></i>Retour à l'accueil
+        </a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+/* Styles supplémentaires pour la cohérence des couleurs */
+.page-link {
+    border-color: #dee2e6;
+}
+
+.page-link:hover {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #212529;
+}
+
+.page-item.active .page-link {
+    background-color: #212529;
+    border-color: #212529;
+}
+
+.dropdown-menu {
+    border: 1px solid #dee2e6;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+.btn-outline-dark {
+    border-color: #212529;
+    color: #212529;
+}
+
+.btn-outline-dark:hover {
+    background-color: #212529;
+    border-color: #212529;
+    color: #fff;
+}
+
+/* Animation pour les cartes produits */
+.product-card {
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+/* Style pour les catégories - FORCER LA COULEUR NOIRE */
+.list-group-item a {
+    color: #212529 !important;
+}
+
+.list-group-item.active a {
+    color: #ffffff !important;
+}
+
+/* Supprimer toute couleur bleu par défaut de Bootstrap */
+a.text-dark:hover {
+    color: #212529 !important;
+}
+
+.list-group-item a:hover {
+    color: #212529 !important;
+    text-decoration: none;
+}
+
+/* Style pour les badges des catégories actives */
+.list-group-item.active {
+    background-color: #212529 !important;
+    border-color: #212529 !important;
+}
+
+.list-group-item.active .badge {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+
+/* Style pour les catégories normales au survol */
+.list-group-item:not(.active):hover {
+    background-color: #f8f9fa;
+    padding-left: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.category-item {
+    transition: all 0.3s ease;
+}
+
+.category-item:hover {
+    background-color: #f8f9fa;
+    border-left: 4px solid #ffc107;
+    padding-left: 1rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animation au scroll pour les cartes produits
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-on-scroll', 'animated');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        el.classList.add('animate-on-scroll');
+        observer.observe(el);
+    });
+
+    // Animation des boutons ajouter au panier
+    const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
+    addToCartBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            if (!this.disabled) {
+                // Animation de pulse
+                this.classList.add('animate__pulse');
+                setTimeout(() => {
+                    this.classList.remove('animate__pulse');
+                }, 600);
+            }
+        });
+    });
+
+    // Mise à jour dynamique du nombre de produits
+    const productCount = {{ products.count }};
+    const categoryBadge = document.querySelector('.badge.bg-dark');
+    if (categoryBadge && productCount > 0) {
+        categoryBadge.textContent = productCount;
+    }
+
+    // Forcer la couleur noire sur tous les liens de catégories
+    const categoryLinks = document.querySelectorAll('.list-group-item a');
+    categoryLinks.forEach(link => {
+        link.classList.add('text-dark');
+        link.classList.remove('text-primary');
+    });
+});
+</script>
+{% endblock %}

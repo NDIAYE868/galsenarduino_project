@@ -1,0 +1,75 @@
+{% extends "shop/base.html" %}
+{% block title %}Panier{% endblock %}
+{% block content %}
+<h1 class="h3 mb-4 text-dark fw-bold">Votre panier</h1>
+
+{% if cart_items %}
+<div class="table-responsive animate-on-scroll">
+  <table class="table align-middle">
+    <thead class="bg-dark text-light">
+      <tr>
+        <th>Produit</th>
+        <th>Prix unitaire</th>
+        <th>Quantité</th>
+        <th>Total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart_items %}
+      <tr class="animate-on-scroll">
+        <td class="fw-bold">{{ item.product.name }}</td>
+        <td>{{ item.price }} FCFA</td>
+        <td>
+            <span class="badge bg-dark fs-6">{{ item.quantity }}</span>
+        </td>
+        <td class="fw-bold text-dark">{{ item.line_total }} FCFA</td>
+        <td>
+          <a href="{% url 'shop:cart_remove' item.product.id %}" class="btn btn-sm btn-outline-danger">
+            <i class="bi bi-trash"></i>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="row justify-content-end mt-4">
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm hover-lift">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><i class="bi bi-receipt"></i> Récapitulatif</h5>
+      </div>
+      <div class="card-body">
+        <p class="d-flex justify-content-between">
+          <span>Sous-total :</span>
+          <span class="fw-bold">{{ total }} FCFA</span>
+        </p>
+        <p class="d-flex justify-content-between">
+          <span>Frais de livraison :</span>
+          <span class="fw-bold">{{ shipping_fees }} FCFA</span>
+        </p>
+        <hr>
+        <p class="d-flex justify-content-between fw-bold fs-5">
+          <span>Total à payer :</span>
+          <span class="text-dark">{{ grand_total }} FCFA</span>
+        </p>
+        <a href="{% url 'shop:checkout' %}" class="btn btn-warning w-100 mt-3">
+          <i class="bi bi-credit-card me-2"></i>Finaliser ma commande
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="text-center py-5 animate-on-scroll">
+  <i class="bi bi-cart-x display-1 text-muted"></i>
+  <h3 class="text-dark mt-3">Votre panier est vide</h3>
+  <p class="text-muted">Découvrez nos produits et trouvez l'inspiration pour vos projets</p>
+  <a href="{% url 'shop:product_list' %}" class="btn btn-warning btn-lg">
+    <i class="bi bi-box-seam me-2"></i>Voir le catalogue
+  </a>
+</div>
+{% endif %}
+{% endblock %}

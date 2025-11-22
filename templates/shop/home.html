@@ -1,0 +1,219 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}Accueil - Matériel Arduino & Électronique au Sénégal{% endblock %}
+{% block content %}
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="bi bi-check-circle-fill me-2"></i>
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+
+<!-- ================= SLIDER RESPONSIVE AMÉLIORÉ ================= -->
+<div id="galsenSlider" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="5000">
+
+  <!-- Indicateurs -->
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#galsenSlider" data-bs-slide-to="0" class="active"></button>
+    <button type="button" data-bs-target="#galsenSlider" data-bs-slide-to="1"></button>
+    <button type="button" data-bs-target="#galsenSlider" data-bs-slide-to="2"></button>
+  </div>
+
+  <div class="carousel-inner rounded-3 shadow-lg">
+
+    <!-- SLIDE 1 -->
+    <div class="carousel-item active">
+      <div class="position-relative">
+        <img src="{% static 'img/slider/slide1.jpg' %}" class="slider-img" alt="Cartes Arduino & ESP32">
+        <div class="carousel-caption slider-caption animate__animated animate__fadeInUp">
+          <h3 class="fw-bold mb-3">Cartes Arduino & ESP32</h3>
+          <p class="fs-5 d-none d-md-block mb-4">Tout le matériel pour vos projets électroniques</p>
+          <a href="{% url 'shop:product_list' %}?category=arduino" class="btn btn-warning btn-lg pulse-animation">
+            <i class="bi bi-arrow-right me-2"></i>Découvrir
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="carousel-item">
+      <div class="position-relative">
+        <img src="{% static 'img/slider/slide2.jpg' %}" class="slider-img" alt="Capteurs et modules électroniques">
+        <div class="carousel-caption slider-caption animate__animated animate__fadeInUp">
+          <h3 class="fw-bold mb-3">Capteurs & Modules</h3>
+          <p class="fs-5 d-none d-md-block mb-4">Idéal pour vos projets IoT et domotique</p>
+          <a href="{% url 'shop:product_list' %}?category=capteurs" class="btn btn-warning btn-lg pulse-animation">
+            <i class="bi bi-arrow-right me-2"></i>Explorer
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="carousel-item">
+      <div class="position-relative">
+        <img src="{% static 'img/slider/slide3.jpg' %}" class="slider-img" alt="Accessoires et outils électroniques">
+        <div class="carousel-caption slider-caption animate__animated animate__fadeInUp">
+          <h3 class="fw-bold mb-3">Accessoires & Outillage</h3>
+          <p class="fs-5 d-none d-md-block mb-4">Tout ce qu'il faut pour réussir vos montages</p>
+          <a href="{% url 'shop:product_list' %}?category=accessoires" class="btn btn-warning btn-lg pulse-animation">
+            <i class="bi bi-arrow-right me-2"></i>Voir plus
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Boutons de navigation -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#galsenSlider" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Précédent</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#galsenSlider" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Suivant</span>
+  </button>
+</div>
+<!-- ================= FIN DU SLIDER ================= -->
+
+
+<!-- ================= AVANTAGES ================= -->
+<div class="row mb-5">
+  <div class="col-12">
+    <div class="bg-light rounded-3 p-4 shadow-sm hover-lift">
+      <div class="row text-center">
+        <div class="col-6 col-md-3 mb-3">
+          <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower">
+            <i class="bi bi-truck fs-1 text-dark"></i>
+          </div>
+          <h6 class="fw-bold mt-2">Livraison Rapide</h6>
+          <p class="small text-muted">Sous 24h à Dakar</p>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+          <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay: 0.5s;">
+            <i class="bi bi-shield-check fs-1 text-dark"></i>
+          </div>
+          <h6 class="fw-bold mt-2">Paiement Sécurisé</h6>
+          <p class="small text-muted">100% fiable</p>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+          <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay: 1s;">
+            <i class="bi bi-headset fs-1 text-dark"></i>
+          </div>
+          <h6 class="fw-bold mt-2">Support Technique</h6>
+          <p class="small text-muted">Assistance gratuite</p>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay: 1.5s;">
+            <i class="bi bi-arrow-repeat fs-1 text-dark"></i>
+          </div>
+          <h6 class="fw-bold mt-2">Retour Facile</h6>
+          <p class="small text-muted">Sous 7 jours</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= CONTENU PRINCIPAL ================= -->
+<div class="row">
+
+  <!-- ================= SIDEBAR ================= -->
+  <div class="col-lg-3 mb-4">
+    <div class="card shadow-sm border-0 sticky-sidebar">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><i class="bi bi-grid"></i> Catégories</h5>
+      </div>
+      <div class="list-group list-group-flush">
+        {% for cat in categories %}
+        <a href="{% url 'shop:product_list_by_category' slug=cat.slug %}" 
+           class="list-group-item d-flex justify-content-between category-item animate__animated">
+          {{ cat.name }}
+          <span class="badge bg-dark">{{ cat.products.count }}</span>
+        </a>
+        {% empty %}
+        <div class="list-group-item text-muted">Aucune catégorie</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PRODUITS ================= -->
+  <!-- ================= PRODUITS ================= -->
+<div class="col-lg-9">
+
+  <!-- Produits Populaires -->
+  <h4 class="text-dark mb-3"><i class="bi bi-star-fill"></i> Produits Populaires</h4>
+  <div class="row g-4">
+    {% for product in popular_products %}
+    <div class="col-6 col-md-4">  <!-- Modifié ici -->
+      <div class="card product-card h-100 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: {{ forloop.counter0|add:0.2 }}s;">
+        <a href="{% url 'shop:product_detail' slug=product.slug %}">
+          <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+        </a>
+
+        <div class="card-body">
+          <h6 class="fw-bold">{{ product.name }}</h6>
+          <p class="small text-muted">{{ product.short_description|truncatechars:80 }}</p>
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-dark">{{ product.price }} FCFA</span>
+          </div>
+        </div>
+
+        <div class="card-footer bg-white border-0">
+          <form action="{% url 'shop:cart_add' product.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="quantity" value="1">
+            <button class="btn btn-warning w-100 add-to-cart-btn">
+              <i class="bi bi-cart-plus me-1"></i> Ajouter au panier
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-muted animate__animated animate__fadeIn">Aucun produit pour le moment.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Nouveautés -->
+  <h4 class="text-dark mt-5 mb-3"><i class="bi bi-lightning-charge-fill"></i> Nouveautés</h4>
+  <div class="row g-4">
+    {% for product in new_products %}
+    <div class="col-6 col-md-4">  <!-- Modifié ici aussi -->
+      <div class="card product-card h-100 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: {{ forloop.counter0|add:0.2 }}s;">
+
+        <a href="{% url 'shop:product_detail' slug=product.slug %}">
+          <img src="{{ product.image.url }}" class="card-img-top product-image">
+        </a>
+
+        <div class="card-body">
+          <h6 class="fw-bold">{{ product.name }}</h6>
+          <p class="small text-muted">{{ product.short_description|truncatechars:80 }}</p>
+          <span class="fw-bold text-dark">{{ product.price }} FCFA</span>
+        </div>
+
+        <div class="card-footer bg-white border-0">
+          <form action="{% url 'shop:cart_add' product.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="quantity" value="1">
+            <button class="btn btn-warning w-100 add-to-cart-btn">
+              <i class="bi bi-cart-plus me-1"></i> Ajouter au panier
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+{% endblock %}

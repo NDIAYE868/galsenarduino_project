@@ -1,0 +1,71 @@
+{% extends "shop/base.html" %}
+{% block title %}Contact{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 mx-auto">
+    <h1 class="h3 mb-4 text-dark fw-bold">Contactez-nous</h1>
+    
+    <div class="card border-0 shadow-sm hover-lift mb-4">
+      <div class="card-body">
+        <p class="lead mb-4">
+          <i class="bi bi-chat-dots text-warning me-2"></i>
+          Une question sur un produit, une commande ou un partenariat ? Envoyez-nous un message.
+        </p>
+        
+        <form method="post" class="animate-on-scroll">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold text-dark">{{ form.name.label }}</label>
+              {{ form.name }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold text-dark">{{ form.email.label }}</label>
+              {{ form.email }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold text-dark">{{ form.whatsapp.label }}</label>
+            {{ form.whatsapp }}
+            <div class="form-text">Facultatif - pour un contact plus rapide</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold text-dark">{{ form.message.label }}</label>
+            {{ form.message }}
+          </div>
+          <button type="submit" class="btn btn-warning btn-lg">
+            <i class="bi bi-send me-2"></i>Envoyer le message
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="row text-center mt-5">
+      <div class="col-md-4 mb-4 animate-on-scroll">
+        <div class="feature-icon">
+          <i class="bi bi-whatsapp fs-1 text-dark"></i>
+        </div>
+        <h6 class="fw-bold mt-2">WhatsApp</h6>
+        <p class="small text-muted">+221 77 000 00 00</p>
+        <p class="small text-muted">Réponse rapide</p>
+      </div>
+      <div class="col-md-4 mb-4 animate-on-scroll">
+        <div class="feature-icon">
+          <i class="bi bi-envelope fs-1 text-dark"></i>
+        </div>
+        <h6 class="fw-bold mt-2">Email</h6>
+        <p class="small text-muted">contact@galsenarduino.sn</p>
+        <p class="small text-muted">Sous 24h</p>
+      </div>
+      <div class="col-md-4 mb-4 animate-on-scroll">
+        <div class="feature-icon">
+          <i class="bi bi-clock fs-1 text-dark"></i>
+        </div>
+        <h6 class="fw-bold mt-2">Horaires</h6>
+        <p class="small text-muted">Lun - Sam</p>
+        <p class="small text-muted">8h - 18h</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

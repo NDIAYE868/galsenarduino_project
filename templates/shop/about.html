@@ -1,0 +1,46 @@
+{% extends "shop/base.html" %}
+{% block title %}À propos{% endblock %}
+{% block content %}
+<div class="row animate-on-scroll">
+    <div class="col-lg-8 mx-auto">
+        <h1 class="h3 mb-4 text-dark fw-bold">À propos de GalsenArduino</h1>
+        
+        <div class="card border-0 shadow-sm hover-lift mb-4">
+            <div class="card-body">
+                <p class="lead mb-3">
+                    <i class="bi bi-cpu-fill text-warning me-2"></i>
+                    GalsenArduino est une boutique en ligne sénégalaise spécialisée dans la vente de cartes Arduino,
+                    ESP32, capteurs, modules et accessoires pour les étudiants, makers et techniciens.
+                </p>
+                <p class="mb-0">
+                    Notre objectif : rendre le matériel électronique accessible, fiable et rapidement livrable partout au Sénégal.
+                </p>
+            </div>
+        </div>
+
+        <div class="row text-center mt-5">
+            <div class="col-md-4 mb-4">
+                <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower">
+                    <i class="bi bi-bullseye fs-1 text-dark"></i>
+                </div>
+                <h5 class="fw-bold mt-2">Notre Mission</h5>
+                <p class="text-muted small">Démocratiser l'électronique au Sénégal</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay: 0.3s;">
+                    <i class="bi bi-lightning-charge fs-1 text-dark"></i>
+                </div>
+                <h5 class="fw-bold mt-2">Rapidité</h5>
+                <p class="text-muted small">Livraison express à Dakar</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay: 0.6s;">
+                    <i class="bi bi-shield-check fs-1 text-dark"></i>
+                </div>
+                <h5 class="fw-bold mt-2">Qualité</h5>
+                <p class="text-muted small">Produits testés et garantis</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
