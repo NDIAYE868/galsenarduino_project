@@ -94,22 +94,22 @@
     </div>
 
     {% if products %}
-    <div class="row g-4">
+    <div class="row g-3">
       {% for product in products %}
-      <div class="col-6 col-md-6 col-lg-4">
+      <div class="col-6 col-md-4 col-lg-4">  <!-- 2 colonnes mobile, 3 colonnes desktop -->
         <div class="card product-card h-100 border-0 shadow-sm animate-on-scroll">
           <a href="{% url 'shop:product_detail' slug=product.slug %}">
-            <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+            <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}" loading="lazy">
           </a>
-          <div class="card-body">
-            <h5 class="card-title fw-bold text-dark">{{ product.name }}</h5>
-            <p class="card-text small text-muted mb-2">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title fw-bold text-dark mb-2">{{ product.name }}</h5>
+            <p class="card-text small text-muted mb-2 flex-grow-1">
               {{ product.short_description|default:product.description|truncatechars:80 }}
             </p>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <span class="fw-bold text-dark fs-5">{{ product.price }} FCFA</span>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="fw-bold text-dark fs-6">{{ product.price }} FCFA</span>
               {% if product.stock > 0 %}
-              <span class="badge bg-success small"><i class="bi bi-check-circle me-1"></i>En stock</span>
+              <span class="badge bg-success small"><i class="bi bi-check-circle me-1"></i>Stock</span>
               {% else %}
               <span class="badge bg-danger small"><i class="bi bi-x-circle me-1"></i>Rupture</span>
               {% endif %}
@@ -121,7 +121,7 @@
               <input type="hidden" name="quantity" value="1">
               <button type="submit" class="btn btn-warning w-100 add-to-cart-btn" {% if product.stock == 0 %}disabled{% endif %}>
                 <i class="bi bi-cart-plus me-1"></i> 
-                {% if product.stock > 0 %}Ajouter au panier{% else %}Rupture{% endif %}
+                {% if product.stock > 0 %}Ajouter{% else %}Rupture{% endif %}
               </button>
             </form>
           </div>
@@ -130,54 +130,99 @@
       {% endfor %}
     </div>
 
-    <!-- Pagination -->
+    <!-- PAGINATION AMÉLIORÉE -->
     {% if is_paginated %}
-    <nav aria-label="Pagination" class="mt-5">
-      <ul class="pagination justify-content-center">
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-          <a class="page-link text-dark" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-            <i class="bi bi-chevron-left"></i> Précédent
-          </a>
-        </li>
-        {% endif %}
-
-        {% for num in page_obj.paginator.page_range %}
-          {% if page_obj.number == num %}
-          <li class="page-item active">
-            <span class="page-link bg-dark border-dark">{{ num }}</span>
-          </li>
-          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-          <li class="page-item">
-            <a class="page-link text-dark" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-              {{ num }}
+    <nav aria-label="Navigation des pages" class="mt-4">
+      {% with total_pages=page_obj.paginator.num_pages current_page=page_obj.number %}
+      
+      <!-- Version Desktop -->
+      <div class="d-none d-md-block">
+        <ul class="pagination justify-content-center mb-0">
+          <!-- Précédent -->
+          <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+            <a class="page-link text-dark" 
+               {% if page_obj.has_previous %}href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"{% endif %}>
+              <i class="bi bi-chevron-left me-1"></i> Précédent
             </a>
           </li>
-          {% endif %}
-        {% endfor %}
 
-        {% if page_obj.has_next %}
-        <li class="page-item">
-          <a class="page-link text-dark" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-            Suivant <i class="bi bi-chevron-right"></i>
-          </a>
-        </li>
-        {% endif %}
-      </ul>
+          <!-- Pages -->
+          {% for num in page_obj.paginator.page_range %}
+            {% if num == current_page %}
+            <li class="page-item active">
+              <span class="page-link bg-dark border-dark">{{ num }}</span>
+            </li>
+            {% elif num >= current_page|add:"-2" and num <= current_page|add:"2" %}
+            <li class="page-item">
+              <a class="page-link text-dark" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                {{ num }}
+              </a>
+            </li>
+            {% endif %}
+          {% endfor %}
+
+          <!-- Suivant -->
+          <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+            <a class="page-link text-dark" 
+               {% if page_obj.has_next %}href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"{% endif %}>
+              Suivant <i class="bi bi-chevron-right ms-1"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Version Mobile -->
+      <div class="d-md-none">
+        <div class="row align-items-center g-2">
+          <div class="col">
+            {% if page_obj.has_previous %}
+            <a class="btn btn-outline-dark btn-sm w-100" 
+               href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+              <i class="bi bi-chevron-left me-1"></i> Précédent
+            </a>
+            {% else %}
+            <button class="btn btn-outline-dark btn-sm w-100" disabled>
+              <i class="bi bi-chevron-left me-1"></i> Précédent
+            </button>
+            {% endif %}
+          </div>
+          
+          <div class="col-auto">
+            <span class="text-dark fw-bold small">
+              {{ current_page }}/{{ total_pages }}
+            </span>
+          </div>
+          
+          <div class="col">
+            {% if page_obj.has_next %}
+            <a class="btn btn-outline-dark btn-sm w-100" 
+               href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+              Suivant <i class="bi bi-chevron-right ms-1"></i>
+            </a>
+            {% else %}
+            <button class="btn btn-outline-dark btn-sm w-100" disabled>
+              Suivant <i class="bi bi-chevron-right ms-1"></i>
+            </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      
+      {% endwith %}
     </nav>
     {% endif %}
 
     {% else %}
-    <div class="text-center py-5 animate-on-scroll">
+    <div class="text-center py-5">
       <i class="bi bi-search display-1 text-muted"></i>
       <h3 class="text-dark mt-3">Aucun produit trouvé</h3>
       <p class="text-muted">Essayez de modifier vos critères de recherche ou consultez toutes nos catégories</p>
-      <div class="d-flex gap-2 justify-content-center">
-        <a href="{% url 'shop:product_list' %}" class="btn btn-warning">
-          <i class="bi bi-grid me-2"></i>Voir tous les produits
+      <div class="d-flex gap-2 justify-content-center flex-wrap">
+        <a href="{% url 'shop:product_list' %}" class="btn btn-warning btn-sm">
+          <i class="bi bi-grid me-2"></i>Tous les produits
         </a>
-        <a href="{% url 'shop:home' %}" class="btn btn-outline-dark">
-          <i class="bi bi-house me-2"></i>Retour à l'accueil
+        <a href="{% url 'shop:home' %}" class="btn btn-outline-dark btn-sm">
+          <i class="bi bi-house me-2"></i>Accueil
         </a>
       </div>
     </div>
@@ -186,15 +231,48 @@
 </div>
 
 <style>
-/* Styles supplémentaires pour la cohérence des couleurs */
+/* RESET ET CORRECTIONS */
+.product-card {
+    transition: all 0.3s ease;
+    margin-bottom: 0;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* BOUTONS AJOUTER AU PANIER - TAILLE FIXE */
+.add-to-cart-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-to-cart-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(255, 193, 7, 0.3);
+}
+
+/* PAGINATION */
+.pagination {
+    margin-bottom: 0;
+}
+
 .page-link {
     border-color: #dee2e6;
+    padding: 0.5rem 0.75rem;
 }
 
 .page-link:hover {
     background-color: #f8f9fa;
     border-color: #dee2e6;
-    color: #212529;
 }
 
 .page-item.active .page-link {
@@ -202,38 +280,101 @@
     border-color: #212529;
 }
 
-.dropdown-menu {
-    border: 1px solid #dee2e6;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-}
-
-.dropdown-item:hover {
+/* IMAGES PRODUITS */
+.product-image {
+    height: 180px;
+    object-fit: cover;
     background-color: #f8f9fa;
-    color: #212529;
 }
 
-.btn-outline-dark {
-    border-color: #212529;
-    color: #212529;
+/* CARTES PRODUITS SUR MOBILE - 2 COLONNES */
+@media (max-width: 768px) {
+    .row.g-3 {
+        display: flex !important;
+        flex-wrap: wrap !important;
+    }
+    
+    .row.g-3 > .col-6 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        width: 50% !important;
+    }
+    
+    .product-card {
+        margin-bottom: 0;
+    }
+    
+    .card-body {
+        padding: 0.75rem;
+    }
+    
+    .card-footer {
+        padding: 0.75rem;
+    }
+    
+    .add-to-cart-btn {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.6rem;
+        min-height: 38px;
+    }
+    
+    .product-image {
+        height: 150px;
+    }
+    
+    .card-title {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .card-text {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+    }
 }
 
-.btn-outline-dark:hover {
-    background-color: #212529;
-    border-color: #212529;
-    color: #fff;
+/* TRÈS PETITS ÉCRANS - 2 COLONNES */
+@media (max-width: 576px) {
+    .row.g-3 > .col-6 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        width: 50% !important;
+    }
+    
+    .product-image {
+        height: 130px;
+    }
+    
+    .add-to-cart-btn {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.5rem;
+        min-height: 36px;
+    }
 }
 
-/* Animation pour les cartes produits */
-.product-card {
-    transition: all 0.3s ease;
+/* ANIMATIONS OPTIMISÉES MOBILE */
+@media (max-width: 768px) {
+    .product-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    }
 }
 
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+/* STICKY SIDEBAR MOBILE */
+@media (max-width: 768px) {
+    .sticky-sidebar {
+        position: relative;
+        top: 0;
+    }
 }
 
-/* Style pour les catégories - FORCER LA COULEUR NOIRE */
+/* BADGES STOCK */
+.badge.small {
+    font-size: 0.7em;
+    padding: 0.25em 0.5em;
+}
+
+/* COULEURS CATÉGORIES */
 .list-group-item a {
     color: #212529 !important;
 }
@@ -242,17 +383,6 @@
     color: #ffffff !important;
 }
 
-/* Supprimer toute couleur bleu par défaut de Bootstrap */
-a.text-dark:hover {
-    color: #212529 !important;
-}
-
-.list-group-item a:hover {
-    color: #212529 !important;
-    text-decoration: none;
-}
-
-/* Style pour les badges des catégories actives */
 .list-group-item.active {
     background-color: #212529 !important;
     border-color: #212529 !important;
@@ -261,17 +391,6 @@ a.text-dark:hover {
 .list-group-item.active .badge {
     background-color: #ffc107 !important;
     color: #212529 !important;
-}
-
-/* Style pour les catégories normales au survol */
-.list-group-item:not(.active):hover {
-    background-color: #f8f9fa;
-    padding-left: 1.5rem;
-    transition: all 0.3s ease;
-}
-
-.category-item {
-    transition: all 0.3s ease;
 }
 
 .category-item:hover {
@@ -292,13 +411,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('animate-on-scroll', 'animated');
+                entry.target.classList.add('animate__fadeInUp');
             }
         });
     }, observerOptions);
 
     document.querySelectorAll('.animate-on-scroll').forEach(el => {
-        el.classList.add('animate-on-scroll');
         observer.observe(el);
     });
 
@@ -307,7 +425,6 @@ document.addEventListener('DOMContentLoaded', function() {
     addToCartBtns.forEach(btn => {
         btn.addEventListener('click', function(e) {
             if (!this.disabled) {
-                // Animation de pulse
                 this.classList.add('animate__pulse');
                 setTimeout(() => {
                     this.classList.remove('animate__pulse');
@@ -315,13 +432,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-    // Mise à jour dynamique du nombre de produits
-    const productCount = {{ products.count }};
-    const categoryBadge = document.querySelector('.badge.bg-dark');
-    if (categoryBadge && productCount > 0) {
-        categoryBadge.textContent = productCount;
-    }
 
     // Forcer la couleur noire sur tous les liens de catégories
     const categoryLinks = document.querySelectorAll('.list-group-item a');

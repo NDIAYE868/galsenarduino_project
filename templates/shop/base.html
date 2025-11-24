@@ -2,6 +2,49 @@
 <!doctype html>
 <html lang="fr">
   <head>
+    <!-- Rich Snippet Organisation -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "GalsenArduino",
+  "url": "{{ request.scheme }}://{{ request.get_host }}",
+  "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'img/logo.png' %}",
+  "description": "Boutique en ligne de matériel Arduino, ESP32, capteurs, modules et composants électroniques au Sénégal",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Dakar",
+    "addressCountry": "SN"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+221-77-436-15-19",
+    "contactType": "Customer service",
+    "areaServed": "SN",
+    "availableLanguage": ["French", "Wolof"]
+  },
+  "sameAs": [
+    "https://www.facebook.com/galsenarduino",
+    "https://www.instagram.com/galsenarduino",
+    "https://wa.me/221774361519"
+  ]
+}
+</script>
+
+<!-- Rich Snippet Website -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "GalsenArduino",
+  "url": "{{ request.scheme }}://{{ request.get_host }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ request.scheme }}://{{ request.get_host }}{% url 'shop:search' %}?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GalsenArduino - {% block title %}Matériel Arduino & Électronique au Sénégal{% endblock %}</title>
@@ -31,17 +74,17 @@
     <!-- ====================================================== -->
     <div class="top-banner bg-warning text-dark py-2">
       <div class="scrolling-text fw-bold">
-        🚚 Livraison gratuite à Dakar à partir de 20 000 FCFA • 📞 Commandez au +221 77 436 15 19 • ⚡ Livraison express sous 24h
+        🚚 Livraison gratuite à Dakar à partir de 20 000 FCFA • 📞 Commandez au <a href="https://wa.me/221774361519" class="text-dark text-decoration-none fw-bold" target="_blank">+221 77 436 15 19</a> • ⚡ Livraison express sous 24h
       </div>
     </div>
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
       <div class="container">
-        <a class="navbar-brand fw-bold d-flex align-items-center animate__animated animate__fadeInLeft" href="{% url 'shop:home' %}">
-          <i class="bi bi-cpu me-2"></i>
+       <a class="navbar-brand fw-bold d-flex align-items-center animate__animated animate__fadeInLeft" href="{% url 'shop:home' %}">
+        <i class="bi bi-cpu me-2 text-warning"></i>
           GalsenArduino
-        </a>
+      </a>
         
         <button class="navbar-toggler animate__animated animate__fadeInRight" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
@@ -153,7 +196,12 @@
             <h6 class="fw-bold">Contact</h6>
             <p class="small"><i class="bi bi-geo-alt text-warning me-2"></i>Dakar, Sénégal</p>
             <p class="small"><i class="bi bi-envelope text-warning me-2"></i>contact@galsenarduino.sn</p>
-            <p class="small"><i class="bi bi-telephone text-warning me-2"></i>+221 77 000 00 00</p>
+            <p class="small">
+          <i class="bi bi-telephone text-warning me-2"></i>
+                <a href="https://wa.me/221774361519" class="text-light text-decoration-none whatsapp-link" target="_blank">
+                    +221 77 436 15 19
+                </a>
+            </p>
 
             <h6 class="fw-bold mt-3">Réseaux sociaux</h6>
             <div class="d-flex gap-3 fs-5">
@@ -175,10 +223,106 @@
       </div>
     </footer>
 
+    <!-- Bouton WhatsApp flottant -->
+<a href="https://wa.me/221774361519" 
+   class="whatsapp-float" 
+   target="_blank" 
+   title="Contactez-nous sur WhatsApp">
+    <i class="bi bi-whatsapp"></i>
+</a>
+
+<style>
+/* Bouton WhatsApp flottant */
+.whatsapp-float {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 60px;
+    height: 60px;
+    background: #25D366;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    animation: pulse-whatsapp 2s infinite;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
+    color: white;
+}
+
+.whatsapp-float:active {
+    transform: scale(0.95);
+}
+
+@keyframes pulse-whatsapp {
+    0% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    }
+}
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+    .whatsapp-float {
+        width: 55px;
+        height: 55px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 1.3rem;
+    }
+}
+</style>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}
 
     <script>
+
+      
+      document.addEventListener('DOMContentLoaded', function () {
+    // Activer le swipe tactile sur Bootstrap Carousel
+    const carousels = document.querySelectorAll('.carousel');
+
+    carousels.forEach(carousel => {
+        let startX = 0;
+        let endX = 0;
+
+        carousel.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+        });
+
+        carousel.addEventListener('touchmove', function(e) {
+            endX = e.touches[0].clientX;
+        });
+
+        carousel.addEventListener('touchend', function() {
+            if (startX - endX > 50) {
+                // Swipe gauche → slide suivant
+                const nextBtn = carousel.querySelector('.carousel-control-next');
+                nextBtn.click();
+            }
+            else if (endX - startX > 50) {
+                // Swipe droit → slide précédent
+                const prevBtn = carousel.querySelector('.carousel-control-prev');
+                prevBtn.click();
+            }
+        });
+    });
+});
       // Animation au scroll
       document.addEventListener('DOMContentLoaded', function() {
         // Animation des éléments au défilement

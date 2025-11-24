@@ -1,7 +1,7 @@
 Projet Django GalsenArduino
 
 1. Créer un environnement virtuel et l'activer
-   python -m venv venv
+   python3 -m venv venv
    venv\Scripts\activate  (Windows)
    source venv/bin/activate (Linux/Mac)
 
