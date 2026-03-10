@@ -29,15 +29,15 @@ class CheckoutForm(forms.ModelForm):
         widgets = {
             "first_name": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Ex : Saliou"
+                "placeholder": "Ex : Awa"
             }),
             "last_name": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Ex : Ndiaye"
+                "placeholder": "Ex : Diop"
             }),
             "whatsapp_number": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Ex : 77 436 15 19"
+                "placeholder": "Ex : 77 100 00 00"
             }),
 
             "address": forms.Textarea(attrs={

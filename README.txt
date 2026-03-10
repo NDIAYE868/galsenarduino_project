@@ -12,7 +12,10 @@ Projet Django GalsenArduino
    cd galsenarduino_project
 
 4. Appliquer les migrations
+   python manage.py makemigrations
    python manage.py migrate
+   
+
    
    si ca ne marche pas install Pillow
    python3 -m pip install Pillow
