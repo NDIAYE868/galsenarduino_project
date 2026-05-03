@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib import messages
+from django.db import transaction
 
 from .models import Category, Product, Order, OrderItem
 from .forms import CheckoutForm, ContactForm
@@ -147,34 +148,57 @@ def checkout(request):
     if request.method == "POST":
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            reference = uuid.uuid4().hex[:10].upper()
-            order = form.save(commit=False)
-            order.reference = reference
-            order.total_amount = grand_total
-            order.shipping_fees = shipping_fees
-            order.save()
+            try:
+                with transaction.atomic():
+                    # 1. Vérification stricte des stocks avec verrouillage pour éviter les conditions de concurrence (race conditions)
+                    locked_products = Product.objects.select_for_update().filter(id__in=product_ids)
+                    locked_products_dict = {str(p.id): p for p in locked_products}
 
-            for product in products:
-                item = cart[str(product.id)]
-                quantity = item["quantity"]
-                OrderItem.objects.create(
-                    order=order,
-                    product=product,
-                    quantity=quantity,
-                    unit_price=Decimal(str(item["price"])),
+                    for product_id_str in product_ids:
+                        product = locked_products_dict.get(product_id_str)
+                        if not product:
+                            raise ValueError("Un produit de votre panier n'est plus disponible.")
+                        
+                        item = cart[product_id_str]
+                        quantity = item["quantity"]
+                        if product.stock < quantity:
+                            raise ValueError(f"Le produit {product.name} n'est plus en stock suffisant (Stock disponible : {product.stock}).")
+                    
+                    # 2. Création de la commande
+                    reference = uuid.uuid4().hex[:10].upper()
+                    order = form.save(commit=False)
+                    order.reference = reference
+                    order.total_amount = grand_total
+                    order.shipping_fees = shipping_fees
+                    order.save()
+
+                    # 3. Création des lignes de commande et mise à jour des stocks
+                    for product_id_str in product_ids:
+                        product = locked_products_dict[product_id_str]
+                        item = cart[product_id_str]
+                        quantity = item["quantity"]
+                        OrderItem.objects.create(
+                            order=order,
+                            product=product,
+                            quantity=quantity,
+                            unit_price=Decimal(str(item["price"])),
+                        )
+                        # update stock
+                        product.stock -= quantity
+                        product.save()
+
+                # 4. Si tout s'est bien passé, on vide le panier
+                _save_cart(request.session, {})
+
+                messages.success(
+                    request,
+                    f"Votre commande a été enregistrée avec succès. Référence : {order.reference}",
                 )
-                # update stock
-                product.stock = max(0, product.stock - quantity)
-                product.save()
-
-            # Clear cart
-            _save_cart(request.session, {})
-
-            messages.success(
-                request,
-                f"Votre commande a été enregistrée avec succès. Référence : {order.reference}",
-            )
-            return redirect("shop:home")
+                return redirect("shop:home")
+            except ValueError as e:
+                # Si un produit n'a pas assez de stock, on annule et on notifie l'utilisateur
+                messages.error(request, str(e))
+                return redirect("shop:cart_detail")
     else:
         form = CheckoutForm()
 
