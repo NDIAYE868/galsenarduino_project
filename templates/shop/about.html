@@ -1,46 +1,188 @@
 {% extends "shop/base.html" %}
 {% block title %}À propos{% endblock %}
-{% block content %}
-<div class="row animate-on-scroll">
-    <div class="col-lg-8 mx-auto">
-        <h1 class="h3 mb-4 text-dark fw-bold">À propos de GalsenArduino</h1>
-        
-        <div class="card border-0 shadow-sm hover-lift mb-4">
-            <div class="card-body">
-                <p class="lead mb-3">
-                    <i class="bi bi-cpu-fill text-warning me-2"></i>
-                    GalsenArduino est une boutique en ligne sénégalaise spécialisée dans la vente de cartes Arduino,
-                    ESP32, capteurs, modules et accessoires pour les étudiants, makers et techniciens.
-                </p>
-                <p class="mb-0">
-                    Notre objectif : rendre le matériel électronique accessible, fiable et rapidement livrable partout au Sénégal.
-                </p>
-            </div>
-        </div>
 
-        <div class="row text-center mt-5">
-            <div class="col-md-4 mb-4">
-                <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower">
-                    <i class="bi bi-bullseye fs-1 text-dark"></i>
+{% block content %}
+<div class="container py-5 animate-on-scroll">
+
+    <!-- En-tête -->
+    <div class="row mb-5">
+        <div class="col-lg-9 mx-auto text-center">
+            <h1 class="display-6 fw-bold text-dark mb-3">
+                À propos de <span class="text-warning">GalsenArduino</span>
+            </h1>
+            <p class="lead text-muted">
+                Votre boutique sénégalaise dédiée à l’électronique, à l’Arduino, à l’IoT,
+                à la robotique et aux projets technologiques innovants.
+            </p>
+        </div>
+    </div>
+
+    <!-- Présentation principale -->
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-sm hover-lift">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="h4 fw-bold text-dark mb-3">
+                        <i class="bi bi-cpu-fill text-warning me-2"></i>
+                        Qui sommes-nous ?
+                    </h2>
+
+                    <p>
+                        <strong>GalsenArduino</strong> est une plateforme e-commerce sénégalaise
+                        spécialisée dans la vente de matériels électroniques destinés aux étudiants,
+                        développeurs, techniciens, enseignants, passionnés de technologie et porteurs
+                        de projets innovants.
+                    </p>
+
+                    <p>
+                        Nous proposons une large gamme de produits : cartes <strong>Arduino</strong>,
+                        <strong>ESP32</strong>, capteurs, modules Bluetooth, Wi-Fi, GSM, relais,
+                        breadboards, composants électroniques, accessoires de prototypage et kits
+                        complets pour apprendre, expérimenter et réaliser des projets concrets.
+                    </p>
+
+                    <p class="mb-0">
+                        Notre ambition est simple : rendre le matériel électronique plus accessible,
+                        fiable et disponible au Sénégal, afin de permettre à chacun de transformer
+                        ses idées en solutions réelles.
+                    </p>
                 </div>
-                <h5 class="fw-bold mt-2">Notre Mission</h5>
-                <p class="text-muted small">Démocratiser l'électronique au Sénégal</p>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay: 0.3s;">
-                    <i class="bi bi-lightning-charge fs-1 text-dark"></i>
-                </div>
-                <h5 class="fw-bold mt-2">Rapidité</h5>
-                <p class="text-muted small">Livraison express à Dakar</p>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay: 0.6s;">
-                    <i class="bi bi-shield-check fs-1 text-dark"></i>
-                </div>
-                <h5 class="fw-bold mt-2">Qualité</h5>
-                <p class="text-muted small">Produits testés et garantis</p>
             </div>
         </div>
     </div>
+
+    <!-- Mission / Vision -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm hover-lift">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-bullseye fs-1 text-warning"></i>
+                    </div>
+                    <h3 class="h5 fw-bold">Notre mission</h3>
+                    <p class="text-muted mb-0">
+                        Démocratiser l’accès aux composants électroniques et accompagner les jeunes
+                        talents dans la réalisation de leurs projets Arduino, IoT, domotique,
+                        robotique et systèmes embarqués.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm hover-lift">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-eye-fill fs-1 text-warning"></i>
+                    </div>
+                    <h3 class="h5 fw-bold">Notre vision</h3>
+                    <p class="text-muted mb-0">
+                        Devenir une référence au Sénégal dans la distribution de matériel électronique
+                        éducatif et professionnel, tout en contribuant au développement d’une véritable
+                        communauté de makers, d’innovateurs et d’entrepreneurs technologiques.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pourquoi nous choisir -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto text-center mb-4">
+            <h2 class="h4 fw-bold text-dark">Pourquoi choisir GalsenArduino ?</h2>
+            <p class="text-muted">
+                Nous ne vendons pas seulement des composants : nous facilitons la création de projets.
+            </p>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center hover-lift">
+                <div class="card-body p-4">
+                    <i class="bi bi-lightning-charge fs-1 text-warning mb-3"></i>
+                    <h5 class="fw-bold">Livraison rapide</h5>
+                    <p class="text-muted small mb-0">
+                        Livraison rapide à Dakar et possibilité d’expédition vers les autres régions
+                        du Sénégal selon la disponibilité.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center hover-lift">
+                <div class="card-body p-4">
+                    <i class="bi bi-shield-check fs-1 text-warning mb-3"></i>
+                    <h5 class="fw-bold">Produits fiables</h5>
+                    <p class="text-muted small mb-0">
+                        Nos produits sont sélectionnés avec soin afin d’offrir du matériel adapté
+                        aux projets scolaires, universitaires et professionnels.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center hover-lift">
+                <div class="card-body p-4">
+                    <i class="bi bi-people-fill fs-1 text-warning mb-3"></i>
+                    <h5 class="fw-bold">Accompagnement</h5>
+                    <p class="text-muted small mb-0">
+                        Nous aidons les débutants et les passionnés à choisir les bons composants
+                        pour leurs projets Arduino, IoT et robotique.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Domaines -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-sm hover-lift">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="h4 fw-bold text-dark mb-4">
+                        <i class="bi bi-diagram-3-fill text-warning me-2"></i>
+                        Nos domaines d’application
+                    </h2>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <p><i class="bi bi-check-circle-fill text-warning me-2"></i>Projets Arduino et ESP32</p>
+                            <p><i class="bi bi-check-circle-fill text-warning me-2"></i>Robotique éducative</p>
+                            <p><i class="bi bi-check-circle-fill text-warning me-2"></i>Objets connectés et IoT</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><i class="bi bi-check-circle-fill text-warning me-2"></i>Domotique et automatisation</p>
+                            <p><i class="bi bi-check-circle-fill text-warning me-2"></i>Prototypes étudiants</p>
+                            <p><i class="bi bi-check-circle-fill text-warning me-2"></i>Projets de fin d’études</p>
+                        </div>
+                    </div>
+
+                    <p class="text-muted mt-3 mb-0">
+                        Que vous soyez débutant ou expérimenté, GalsenArduino vous accompagne dans
+                        la réalisation de solutions électroniques simples, utiles et innovantes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to action -->
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-sm bg-dark text-white text-center">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="h4 fw-bold mb-3">Prêt à lancer votre prochain projet électronique ?</h2>
+                    <p class="mb-4">
+                        Découvrez nos produits et trouvez les composants adaptés à vos idées.
+                    </p>
+                    <a href="{% url 'shop:product_list' %}" class="btn btn-warning fw-bold px-4">
+                        Voir la boutique
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
