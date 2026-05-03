@@ -219,3 +219,25 @@ def search(request):
             | Q(category__name__icontains=query)
         ).distinct()
     return render(request, "shop/search_results.html", {"query": query, "products": products})
+
+# Dans shop/views.py
+
+def cart_update(request, product_id):  # <-- Vérifie que le nom est EXACTEMENT celui-là
+    cart = _get_cart(request.session)
+    product_key = str(product_id)
+    
+    if request.method == "POST":
+        try:
+            new_quantity = int(request.POST.get("quantity", 1))
+            if product_key in cart:
+                if new_quantity > 0:
+                    cart[product_key]["quantity"] = new_quantity
+                    messages.success(request, "Quantité mise à jour.")
+                else:
+                    del cart[product_key]
+                    messages.success(request, "Produit supprimé.")
+                _save_cart(request.session, cart)
+        except ValueError:
+            messages.error(request, "Quantité invalide.")
+            
+    return redirect("shop:cart_detail")

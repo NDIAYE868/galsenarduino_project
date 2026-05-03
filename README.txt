@@ -1,9 +1,9 @@
 Projet Django GalsenArduino
 
 1. Créer un environnement virtuel et l'activer
-   python3 -m venv venv
+   python3 -m venv venv && source venv/bin/activate (Linux/Mac)
    venv\Scripts\activate  (Windows)
-   source venv/bin/activate (Linux/Mac)
+   
 
 2. Installer Django
    pip install django
@@ -33,4 +33,13 @@ Projet Django GalsenArduino
    http://127.0.0.1:8000/admin/
 
 pip install django-ckeditor
+
+Résumé pour tes prochaines mises à jour :
+Une fois le projet configuré, la routine est simple :
+
+git add .
+
+git commit -m "Description de tes changements"
+
+git push
 

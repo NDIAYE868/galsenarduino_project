@@ -18,4 +18,5 @@ urlpatterns = [
     path("politique-retour/", views.return_policy, name="return_policy"),
     path("cgu/", views.terms, name="terms"),
     path("recherche/", views.search, name="search"),
+    path('cart/update/<int:product_id>/', views.cart_update, name='cart_update'),
 ]

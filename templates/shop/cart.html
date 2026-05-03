@@ -21,7 +21,14 @@
         <td class="fw-bold">{{ item.product.name }}</td>
         <td>{{ item.price }} FCFA</td>
         <td>
-            <span class="badge bg-dark fs-6">{{ item.quantity }}</span>
+  <form action="{% url 'shop:cart_update' item.product.id %}" method="post" class="cart-update-form">
+    {% csrf_token %}
+    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" 
+           class="form-control form-control-sm text-center quantity-input" 
+           style="width: 70px;"
+           onchange="this.form.submit()"> {# Le bouton est supprimé ou caché #}
+  </form>
+</td>
         </td>
         <td class="fw-bold text-dark">{{ item.line_total }} FCFA</td>
         <td>
