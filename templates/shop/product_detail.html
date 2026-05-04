@@ -80,7 +80,9 @@
       {% csrf_token %}
       <div class="input-group mb-3" style="max-width: 220px;">
         <span class="input-group-text">Quantité</span>
-        <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control">
+        <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control" 
+       onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+       oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '') || 1">
       </div>
       <button type="submit" class="btn btn-warning btn-lg add-to-cart-detail" {% if product.stock == 0 %}disabled{% endif %}>
         <i class="bi bi-cart-plus me-2"></i> 

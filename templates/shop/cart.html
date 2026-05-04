@@ -24,9 +24,12 @@
   <form action="{% url 'shop:cart_update' item.product.id %}" method="post" class="cart-update-form">
     {% csrf_token %}
     <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" 
-           class="form-control form-control-sm text-center quantity-input" 
-           style="width: 70px;"
-           onchange="this.form.submit()"> {# Le bouton est supprimé ou caché #}
+       class="form-control form-control-sm text-center quantity-input" 
+       style="width: 70px;"
+       onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+       oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '') || 1; checkStock(this, {{ item.product.stock }})"
+       onchange="if(!this.dataset.error) this.form.submit()">
+<small class="text-danger stock-error" style="display:none;">Max : {{ item.product.stock }} unité(s)</small>
   </form>
 </td>
         </td>
@@ -79,4 +82,17 @@
   </a>
 </div>
 {% endif %}
+<script>
+function checkStock(input, maxStock) {
+    const errorMsg = input.nextElementSibling;
+    if (parseInt(input.value) > maxStock) {
+        errorMsg.style.display = 'block';
+        input.dataset.error = 'true';
+        input.value = maxStock; // Bloquer à la valeur max
+    } else {
+        errorMsg.style.display = 'none';
+        delete input.dataset.error;
+    }
+}
+</script>
 {% endblock %}

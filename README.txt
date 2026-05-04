@@ -1,9 +1,13 @@
 Projet Django GalsenArduino
 
 1. Créer un environnement virtuel et l'activer
+Updated upstream
    python3 -m venv venv && source venv/bin/activate (Linux/Mac)
    venv\Scripts\activate  (Windows)
    
+   python3 -m venv venv &&  source venv/bin/activate (Linux/Mac)
+   venv\Scripts\activate  (Windows)
+  
 
 2. Installer Django
    pip install django
@@ -13,6 +17,7 @@ Projet Django GalsenArduino
 
 4. Appliquer les migrations
    python manage.py makemigrations
+   
    python manage.py migrate
    
 
@@ -21,6 +26,9 @@ Projet Django GalsenArduino
    python3 -m pip install Pillow
 
 5. Créer un super utilisateur
+
+python3 -m pip install Pillow
+
    python manage.py createsuperuser
 
 6. Lancer le serveur
