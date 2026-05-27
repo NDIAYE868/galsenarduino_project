@@ -37,7 +37,8 @@ class CheckoutForm(forms.ModelForm):
             }),
             "whatsapp_number": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Ex : 77 123 45 67"
+                "placeholder": "Ex : 77 123 45 67",
+                "pattern": "[0-9]{9}"
             }),
 
             "address": forms.Textarea(attrs={
