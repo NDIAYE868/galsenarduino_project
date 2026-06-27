@@ -118,9 +118,8 @@ CSRF_TRUSTED_ORIGINS = [
 
 # Si ce n’est pas déjà fait, ajoute aussi :
 ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
     "galsenarduino.tech",
     "www.galsenarduino.tech",
+    "localhost",
+    "127.0.0.1"
 ]
-
