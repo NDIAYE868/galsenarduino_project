@@ -7,16 +7,16 @@ from shop.sitemap import ProductSitemap, CategorySitemap, StaticSitemap
 
 # Configuration des sitemaps
 sitemaps = {
-    'products': ProductSitemap,
-    'categories': CategorySitemap,
-    'static': StaticSitemap,
+    "static": StaticSitemap,
+    "products": ProductSitemap,
+    "categories": CategorySitemap,
 }
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('shop.urls')),  # ⬅️ Le chatbot est dans shop/urls.py
     path("ckeditor/", include("ckeditor_uploader.urls")),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
 ]
 
 if settings.DEBUG:

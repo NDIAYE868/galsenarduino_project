@@ -37,10 +37,14 @@ class StaticSitemap(Sitemap):
 
     def items(self):
         return [
-            'shop:home',
-            'shop:product_list', 
-            'shop:about',
-            'shop:contact',
+            "shop:home",
+            "shop:product_list",
+            "shop:about",
+            "shop:contact",
+            "shop:delivery_policy",
+            "shop:return_policy",
+            "shop:terms",
+            "shop:search",
         ]
 
     def location(self, item):
