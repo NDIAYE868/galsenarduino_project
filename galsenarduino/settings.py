@@ -66,9 +66,9 @@ WSGI_APPLICATION = 'galsenarduino.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'galsenarduino',
+        'NAME': 'galsenarduino_db',
         'USER': 'saliou',
-        'PASSWORD': '436153',
+        'PASSWORD': 'Nd!@ye2k24',
         'HOST': 'localhost',
         'PORT': '5432',
     }
