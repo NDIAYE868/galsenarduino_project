@@ -1,6 +1,19 @@
 import os
 from pathlib import Path
 
+
+PASSWORD = os.getenv("DB_PASSWORD")
+
+
+import os
+import sys
+
+os.environ["PYTHONUTF8"] = "1"
+sys.stdout.reconfigure(encoding='utf-8')
+sys.stderr.reconfigure(encoding='utf-8')
+
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-galsenarduino-change-me'
@@ -52,8 +65,12 @@ WSGI_APPLICATION = 'galsenarduino.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'galsenarduino',
+        'USER': 'saliou',
+        'PASSWORD': '436153',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
