@@ -107,3 +107,16 @@ CKEDITOR_ALLOW_NONIMAGE_FILES = False
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Autoriser ton domaine en HTTPS
+CSRF_TRUSTED_ORIGINS = [
+    "https://galsenarduino.tech",
+    "https://www.galsenarduino.tech",
+]
+
+# Si ce n’est pas déjà fait, ajoute aussi :
+ALLOWED_HOSTS = [
+    "galsenarduino.tech",
+    "www.galsenarduino.tech",
+]
