@@ -25,20 +25,21 @@
 
   <div class="carousel-inner rounded-3 shadow-lg">
 
-    <!-- SLIDE 1 -->
-    <div class="carousel-item active">
+     <!-- SLIDE 3 -->
+    <div class="carousel-item">
       <div class="position-relative">
-        <img src="{% static 'img/slider/slide1.jpg' %}" class="slider-img" alt="Cartes Arduino & ESP32">
+        <img src="{% static 'img/slider/slide3.jpg' %}" class="slider-img" alt="Accessoires et outils électroniques">
         <div class="carousel-caption slider-caption animate__animated animate__fadeInUp">
-          <h3 class="fw-bold mb-3">Cartes Arduino & ESP32</h3>
-          <p class="fs-5 d-none d-md-block mb-4">Tout le matériel pour vos projets électroniques</p>
-          <a href="{% url 'shop:product_list' %}?category=arduino" class="btn btn-warning btn-lg pulse-animation">
-            <i class="bi bi-arrow-right me-2"></i>Découvrir
+          <h3 class="fw-bold mb-3">Accessoires & Outillage</h3>
+          <p class="fs-5 d-none d-md-block mb-4">Tout ce qu'il faut pour réussir vos montages</p>
+          <a href="{% url 'shop:product_list' %}?category=accessoires" class="btn btn-warning btn-lg pulse-animation">
+            <i class="bi bi-arrow-right me-2"></i>Voir plus
           </a>
         </div>
       </div>
     </div>
 
+   
     <!-- SLIDE 2 -->
     <div class="carousel-item">
       <div class="position-relative">
@@ -53,15 +54,15 @@
       </div>
     </div>
 
-    <!-- SLIDE 3 -->
-    <div class="carousel-item">
+     <!-- SLIDE 1 -->
+    <div class="carousel-item active">
       <div class="position-relative">
-        <img src="{% static 'img/slider/slide3.jpg' %}" class="slider-img" alt="Accessoires et outils électroniques">
+        <img src="{% static 'img/slider/slide1.jpg' %}" class="slider-img" alt="Cartes Arduino & ESP32">
         <div class="carousel-caption slider-caption animate__animated animate__fadeInUp">
-          <h3 class="fw-bold mb-3">Accessoires & Outillage</h3>
-          <p class="fs-5 d-none d-md-block mb-4">Tout ce qu'il faut pour réussir vos montages</p>
-          <a href="{% url 'shop:product_list' %}?category=accessoires" class="btn btn-warning btn-lg pulse-animation">
-            <i class="bi bi-arrow-right me-2"></i>Voir plus
+          <h3 class="fw-bold mb-3">Cartes Arduino & ESP32</h3>
+          <p class="fs-5 d-none d-md-block mb-4">Tout le matériel pour vos projets électroniques</p>
+          <a href="{% url 'shop:product_list' %}?category=arduino" class="btn btn-warning btn-lg pulse-animation">
+            <i class="bi bi-arrow-right me-2"></i>Découvrir
           </a>
         </div>
       </div>
