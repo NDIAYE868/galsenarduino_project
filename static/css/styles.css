@@ -750,3 +750,45 @@ footer a.footer-link:hover {
     opacity: 1;
 }
 
+/* ================= ALERTE SYSTÈME DYNAMIQUE (TOAST) ================= */
+.galsen-alert {
+    background-color: #212529 !important;
+    color: #ffffff !important;
+    border-left: 5px solid #ffc107 !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 1rem 1.25rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    width: 100%;
+    transition: opacity 0.4s ease, transform 0.4s ease, margin 0.4s ease, padding 0.4s ease, height 0.4s ease !important;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.galsen-alert.hide {
+    opacity: 0 !important;
+    transform: translateY(-20px) !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}
+
+.galsen-alert .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+}
+
+.galsen-alert .btn-close:hover {
+    opacity: 1;
+}
+

@@ -13,13 +13,33 @@ document.addEventListener("DOMContentLoaded", function() {
       })
       .then(response => response.json())
       .then(data => {
-        // ✅ Message global en haut
+        // ✅ Message global en haut (remplace directement l'ancien message et dure 2 secondes)
         const globalMsg = document.getElementById("global-message");
-        globalMsg.innerHTML = `<div class="alert alert-success text-center">${data.message}</div>`;
+        
+        // Vider le message précédent immédiatement
+        globalMsg.innerHTML = "";
+        
+        const alertDiv = document.createElement("div");
+        alertDiv.className = "galsen-alert animate__animated animate__slideInDown";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.innerHTML = `
+          <div class="d-flex align-items-center">
+            <i class="bi bi-check-circle-fill text-warning me-3 fs-5"></i>
+            <span class="fw-semibold text-white">${data.message}</span>
+          </div>
+          <button type="button" class="btn-close ms-3" aria-label="Close" onclick="this.parentElement.remove()"></button>
+        `;
+        
+        globalMsg.appendChild(alertDiv);
 
-        // Supprimer après 3 secondes
+        // Supprimer l'alerte après 3 secondes avec animation
         setTimeout(() => {
-          globalMsg.innerHTML = "";
+            alertDiv.classList.remove("animate__slideInDown");
+            alertDiv.classList.add("animate__fadeOutUp");
+
+            alertDiv.addEventListener("animationend", () => {
+                alertDiv.remove();
+            }, { once: true });
         }, 3000);
 
         // ✅ Mettre à jour les compteurs panier si présents

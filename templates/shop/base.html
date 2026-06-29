@@ -73,7 +73,23 @@
 
      <!-- Zone pour les messages globaux -->
       <div id="global-message" class="position-fixed top-0 start-50 translate-middle-x mt-3" 
-       style="z-index: 1050; width: 80%; max-width: 600px;"></div>
+       style="z-index: 1055; width: 90%; max-width: 500px;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="galsen-alert animate__animated animate__slideInDown" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="bi 
+                            {% if message.tags == 'success' %}bi-check-circle-fill text-warning
+                            {% elif message.tags == 'error' %}bi-exclamation-triangle-fill text-danger
+                            {% else %}bi-info-circle-fill text-warning{% endif %} 
+                            me-3 fs-5"></i>
+                        <span class="fw-semibold text-white">{{ message }}</span>
+                    </div>
+                    <button type="button" class="btn-close ms-3" aria-label="Close" onclick="this.parentElement.remove()"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+      </div>
 
 
    
@@ -396,6 +412,17 @@
         categoryItems.forEach((item, index) => {
           item.classList.add('animate__fadeInLeft');
           item.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Fermeture automatique des alertes Django après 3 secondes
+        const systemAlerts = document.querySelectorAll('#global-message .galsen-alert');
+        systemAlerts.forEach(alert => {
+          setTimeout(() => {
+            alert.classList.add('animate__fadeOutUp');
+            alert.addEventListener('animationend', () => {
+              alert.remove();
+            });
+          }, 3000);
         });
       });
     </script>
