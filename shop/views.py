@@ -4,6 +4,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib import messages
 from django.db import transaction
+from django.http import JsonResponse
+
+from django.http import HttpResponseRedirect
 
 from .models import Category, Product, Order, OrderItem
 from .forms import CheckoutForm, ContactForm
@@ -114,10 +117,19 @@ def cart_add(request, product_id):
         cart[product_key] = {"quantity": 0, "price": str(product.price)}
 
     cart[product_key]["quantity"] += quantity
-
     _save_cart(request.session, cart)
-    messages.success(request, f"{product.name} ajouté au panier.")
-    return redirect("shop:cart_detail")
+
+    message = f"{product.name} ajouté au panier."
+
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return JsonResponse({
+            "message": message,
+            "cart_count": sum(item["quantity"] for item in cart.values())
+        })
+
+    messages.success(request, message)
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
+
 
 def cart_remove(request, product_id):
     cart = _get_cart(request.session)

@@ -6,9 +6,9 @@
 {% if messages %}
 {% for message in messages %}
 <div class="alert alert-success alert-dismissible fade show" role="alert">
-    <i class="bi bi-check-circle-fill me-2"></i>
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <i class="bi bi-check-circle-fill me-2"></i>
+  {{ message }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endfor %}
 {% endif %}
@@ -28,7 +28,7 @@
     <!-- SLIDE 2 -->
     <div class="carousel-item">
       <div class="position-relative">
-        <img src="{% static 'img/slider/slide2.jpg' %}" class="slider-img" alt="Capteurs et modules électroniques">
+        <img src="{% static 'img/slider/slide2.jpeg' %}" class="slider-img" alt="Capteurs et modules électroniques">
         <div class="carousel-caption slider-caption animate__animated animate__fadeInUp">
           <h3 class="fw-bold mb-3">Capteurs & Modules</h3>
           <p class="fs-5 d-none d-md-block mb-4">Idéal pour vos projets IoT et domotique</p>
@@ -38,11 +38,11 @@
         </div>
       </div>
     </div>
-     
+
     <!-- SLIDE 1 -->
     <div class="carousel-item active">
       <div class="position-relative">
-        <img src="{% static 'img/slider/slide2.jpg' %}" class="slider-img" alt="Cartes Arduino & ESP32">
+        <img src="{% static 'img/slider/slide1.jpg' %}" class="slider-img" alt="Cartes Arduino & ESP32">
         <div class="carousel-caption slider-caption animate__animated animate__fadeInUp">
           <h3 class="fw-bold mb-3">Cartes Arduino & ESP32</h3>
           <p class="fs-5 d-none d-md-block mb-4">Tout le matériel pour vos projets électroniques</p>
@@ -53,7 +53,7 @@
       </div>
     </div>
 
-    
+
 
     <!-- SLIDE 3 -->
     <div class="carousel-item">
@@ -97,21 +97,24 @@
           <p class="small text-muted">Sous 24h à Dakar</p>
         </div>
         <div class="col-6 col-md-3 mb-3">
-          <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay: 0.5s;">
+          <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower"
+            style="animation-delay: 0.5s;">
             <i class="bi bi-shield-check fs-1 text-dark"></i>
           </div>
           <h6 class="fw-bold mt-2">Paiement Sécurisé</h6>
           <p class="small text-muted">100% fiable</p>
         </div>
         <div class="col-6 col-md-3 mb-3">
-          <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay: 1s;">
+          <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower"
+            style="animation-delay: 1s;">
             <i class="bi bi-headset fs-1 text-dark"></i>
           </div>
           <h6 class="fw-bold mt-2">Support Technique</h6>
           <p class="small text-muted">Assistance gratuite</p>
         </div>
         <div class="col-6 col-md-3">
-          <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower" style="animation-delay: 1.5s;">
+          <div class="feature-icon animate__animated animate__pulse animate__infinite animate__slower"
+            style="animation-delay: 1.5s;">
             <i class="bi bi-arrow-repeat fs-1 text-dark"></i>
           </div>
           <h6 class="fw-bold mt-2">Retour Facile</h6>
@@ -134,8 +137,8 @@
       </div>
       <div class="list-group list-group-flush">
         {% for cat in categories %}
-        <a href="{% url 'shop:product_list_by_category' slug=cat.slug %}" 
-           class="list-group-item d-flex justify-content-between category-item animate__animated">
+        <a href="{% url 'shop:product_list_by_category' slug=cat.slug %}"
+          class="list-group-item d-flex justify-content-between category-item animate__animated">
           {{ cat.name }}
           <span class="badge bg-dark">{{ cat.products.count }}</span>
         </a>
@@ -148,74 +151,76 @@
 
   <!-- ================= PRODUITS ================= -->
   <!-- ================= PRODUITS ================= -->
-<div class="col-lg-9">
+  <div class="col-lg-9">
 
-  <!-- Produits Populaires -->
-  <h4 class="text-dark mb-3"><i class="bi bi-star-fill"></i> Produits Populaires</h4>
-  <div class="row g-4">
-    {% for product in popular_products %}
-    <div class="col-6 col-md-4">  <!-- Modifié ici -->
-      <div class="card product-card h-100 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: {{ forloop.counter0|add:0.2 }}s;">
-        <a href="{% url 'shop:product_detail' slug=product.slug %}">
-          <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
-        </a>
+    <!-- Produits Populaires -->
+    <h4 class="text-dark mb-3"><i class="bi bi-star-fill"></i> Produits Populaires</h4>
+    <div class="row g-4">
+      {% for product in popular_products %}
+      <div class="col-6 col-md-4"> <!-- Modifié ici -->
+        <div class="card product-card h-100 shadow-sm animate__animated animate__fadeInUp"
+          style="animation-delay: {{ forloop.counter0|add:0.2 }}s;">
+          <a href="{% url 'shop:product_detail' slug=product.slug %}">
+            <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+          </a>
 
-        <div class="card-body">
-          <h6 class="fw-bold">{{ product.name }}</h6>
-          <p class="small text-muted">{{ product.short_description|truncatechars:80 }}</p>
-          <div class="d-flex justify-content-between">
-            <span class="fw-bold text-dark">{{ product.price }} FCFA</span>
+          <div class="card-body">
+            <h6 class="fw-bold">{{ product.name }}</h6>
+            <p class="small text-muted">{{ product.short_description|truncatechars:80 }}</p>
+            <div class="d-flex justify-content-between">
+              <span class="fw-bold text-dark">{{ product.price }} FCFA</span>
+            </div>
+          </div>
+
+          <div class="card-footer bg-white border-0">
+            <form action="{% url 'shop:cart_add' product.id %}" method="post" class="add-to-cart-form">
+              {% csrf_token %}
+              <input type="hidden" name="quantity" value="1">
+              <button class="btn btn-warning w-100 add-to-cart-btn">
+                <i class="bi bi-cart-plus me-1"></i> Ajouter au panier
+              </button>
+            </form>
           </div>
         </div>
+      </div>
+      {% empty %}
+      <p class="text-muted animate__animated animate__fadeIn">Aucun produit pour le moment.</p>
+      {% endfor %}
+    </div>
 
-        <div class="card-footer bg-white border-0">
-          <form action="{% url 'shop:cart_add' product.id %}" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="quantity" value="1">
-            <button class="btn btn-warning w-100 add-to-cart-btn">
-              <i class="bi bi-cart-plus me-1"></i> Ajouter au panier
-            </button>
-          </form>
+    <!-- Nouveautés -->
+    <h4 class="text-dark mt-5 mb-3"><i class="bi bi-lightning-charge-fill"></i> Nouveautés</h4>
+    <div class="row g-4">
+      {% for product in new_products %}
+      <div class="col-6 col-md-4"> <!-- Modifié ici aussi -->
+        <div class="card product-card h-100 shadow-sm animate__animated animate__fadeInUp"
+          style="animation-delay: {{ forloop.counter0|add:0.2 }}s;">
+
+          <a href="{% url 'shop:product_detail' slug=product.slug %}">
+            <img src="{{ product.image.url }}" class="card-img-top product-image">
+          </a>
+
+          <div class="card-body">
+            <h6 class="fw-bold">{{ product.name }}</h6>
+            <p class="small text-muted">{{ product.short_description|truncatechars:80 }}</p>
+            <span class="fw-bold text-dark">{{ product.price }} FCFA</span>
+          </div>
+
+          <div class="card-footer bg-white border-0">
+            <form action="{% url 'shop:cart_add' product.id %}" method="post" class="add-to-cart-form">
+              {% csrf_token %}
+              <input type="hidden" name="quantity" value="1">
+              <button class="btn btn-warning w-100 add-to-cart-btn">
+                <i class="bi bi-cart-plus me-1"></i> Ajouter au panier
+              </button>
+            </form>
+          </div>
+
         </div>
       </div>
+      {% endfor %}
     </div>
-    {% empty %}
-    <p class="text-muted animate__animated animate__fadeIn">Aucun produit pour le moment.</p>
-    {% endfor %}
+
   </div>
 
-  <!-- Nouveautés -->
-  <h4 class="text-dark mt-5 mb-3"><i class="bi bi-lightning-charge-fill"></i> Nouveautés</h4>
-  <div class="row g-4">
-    {% for product in new_products %}
-    <div class="col-6 col-md-4">  <!-- Modifié ici aussi -->
-      <div class="card product-card h-100 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: {{ forloop.counter0|add:0.2 }}s;">
-
-        <a href="{% url 'shop:product_detail' slug=product.slug %}">
-          <img src="{{ product.image.url }}" class="card-img-top product-image">
-        </a>
-
-        <div class="card-body">
-          <h6 class="fw-bold">{{ product.name }}</h6>
-          <p class="small text-muted">{{ product.short_description|truncatechars:80 }}</p>
-          <span class="fw-bold text-dark">{{ product.price }} FCFA</span>
-        </div>
-
-        <div class="card-footer bg-white border-0">
-          <form action="{% url 'shop:cart_add' product.id %}" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="quantity" value="1">
-            <button class="btn btn-warning w-100 add-to-cart-btn">
-              <i class="bi bi-cart-plus me-1"></i> Ajouter au panier
-            </button>
-          </form>
-        </div>
-
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-
-</div>
-
-{% endblock %}
+  {% endblock %}

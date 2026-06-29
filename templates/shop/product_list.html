@@ -116,14 +116,17 @@
             </div>
           </div>
           <div class="card-footer bg-white border-0 pt-0">
-            <form action="{% url 'shop:cart_add' product.id %}" method="post">
-              {% csrf_token %}
-              <input type="hidden" name="quantity" value="1">
-              <button type="submit" class="btn btn-warning w-100 add-to-cart-btn" {% if product.stock == 0 %}disabled{% endif %}>
-                <i class="bi bi-cart-plus me-1"></i> 
-                {% if product.stock > 0 %}Ajouter{% else %}Rupture{% endif %}
-              </button>
-            </form>
+    <form action="{% url 'shop:cart_add' product.id %}" method="post" class="add-to-cart-form">
+      {% csrf_token %}
+      <input type="hidden" name="quantity" value="1">
+      <button type="submit" class="btn btn-warning w-100 add-to-cart-btn" {% if product.stock == 0 %}disabled{% endif %}>
+        <i class="bi bi-cart-plus me-1"></i> 
+        {% if product.stock > 0 %}Ajouter{% else %}Rupture{% endif %}
+      </button>
+    </form>
+
+
+
           </div>
         </div>
       </div>

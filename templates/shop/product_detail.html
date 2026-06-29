@@ -76,19 +76,21 @@
     <p><span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i>Rupture de stock</span></p>
     {% endif %}
 
-    <form method="post" action="{% url 'shop:cart_add' product.id %}" class="mb-3">
-      {% csrf_token %}
-      <div class="input-group mb-3" style="max-width: 220px;">
-        <span class="input-group-text">Quantité</span>
-        <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control" 
-       onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-       oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '') || 1">
-      </div>
-      <button type="submit" class="btn btn-warning btn-lg add-to-cart-detail" {% if product.stock == 0 %}disabled{% endif %}>
-        <i class="bi bi-cart-plus me-2"></i> 
-        {% if product.stock > 0 %}Ajouter au panier{% else %}Produit indisponible{% endif %}
-      </button>
+    <form method="post" action="{% url 'shop:cart_add' product.id %}" class="add-to-cart-form mb-3">
+        {% csrf_token %}
+        <div class="input-group mb-3" style="max-width: 220px;">
+            <span class="input-group-text">Quantité</span>
+            <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-warning btn-lg" {% if product.stock == 0 %}disabled{% endif %}>
+            <i class="bi bi-cart-plus me-2"></i> 
+            {% if product.stock > 0 %}Ajouter au panier{% else %}Produit indisponible{% endif %}
+        </button>
     </form>
+
+<!-- Zone pour afficher le message -->
+<div class="cart-message"></div>
+
 
     <div class="mt-4">
       <h2 class="h5 border-bottom pb-2">Description</h2>
@@ -136,14 +138,18 @@
         </div>
       </div>
       <div class="card-footer bg-white border-0 pt-0">
-        <form action="{% url 'shop:cart_add' item.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="quantity" value="1">
-          <button type="submit" class="btn btn-warning w-100 add-to-cart-btn" {% if item.stock == 0 %}disabled{% endif %}>
-            <i class="bi bi-cart-plus me-1"></i> 
-            {% if item.stock > 0 %}Ajouter{% else %}Rupture{% endif %}
-          </button>
-        </form>
+        <form method="post" action="{% url 'shop:cart_add' product.id %}" class="add-to-cart-form mb-3">
+  {% csrf_token %}
+  <div class="input-group mb-3" style="max-width: 220px;">
+    <span class="input-group-text">Quantité</span>
+    <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-warning btn-lg" {% if product.stock == 0 %}disabled{% endif %}>
+    <i class="bi bi-cart-plus me-2"></i> 
+    {% if product.stock > 0 %}Ajouter au panier{% else %}Produit indisponible{% endif %}
+  </button>
+</form>
+
       </div>
     </div>
   </div>
@@ -152,6 +158,8 @@
 {% endif %}
 
 <style>
+
+      
 /* Styles pour la galerie d'images */
 .image-gallery-wrapper {
     position: relative;

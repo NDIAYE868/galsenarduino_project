@@ -69,6 +69,13 @@
   </head>
   <body class="d-flex flex-column min-vh-100">
 
+    <script src="{% static 'js/cart.js' %}" defer></script>
+
+     <!-- Zone pour les messages globaux -->
+      <div id="global-message" class="position-fixed top-0 start-50 translate-middle-x mt-3" 
+       style="z-index: 1050; width: 80%; max-width: 600px;"></div>
+
+
    
     <div class="top-banner bg-warning text-dark py-2">
       <div class="scrolling-text fw-bold">
@@ -89,6 +96,16 @@
           GalsenArduino
       </a>
         
+        <!-- PANIER MOBILE (visible uniquement sur mobile, à côté du bouton hamburger) -->
+        <div class="d-flex align-items-center d-lg-none ms-auto me-3">
+          <a href="{% url 'shop:cart_detail' %}" class="btn btn-warning btn-sm position-relative cart-animation">
+            <i class="bi bi-cart3"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
+              {{ cart_total_items|default:0 }}
+            </span>
+          </a>
+        </div>
+
         <button class="navbar-toggler animate__animated animate__fadeInRight" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -153,10 +170,10 @@
               </div>
             </form>
             
-            <!-- PANIER -->
-            <a href="{% url 'shop:cart_detail' %}" class="btn btn-warning btn-sm position-relative cart-animation">
+            <!-- PANIER DESKTOP (masqué sur mobile) -->
+            <a href="{% url 'shop:cart_detail' %}" class="btn btn-warning btn-sm position-relative cart-animation d-none d-lg-block">
               <i class="bi bi-cart3"></i>
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
                 {{ cart_total_items|default:0 }}
               </span>
             </a>

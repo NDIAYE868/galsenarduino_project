@@ -40,7 +40,7 @@
           <a href="{% url 'shop:product_detail' slug=product.slug %}" class="btn btn-outline-dark btn-sm flex-fill">
             <i class="bi bi-eye me-1"></i>Voir
           </a>
-          <form action="{% url 'shop:cart_add' product.id %}" method="post" class="flex-fill">
+          <form action="{% url 'shop:cart_add' product.id %}" method="post" class="flex-fill add-to-cart-form">
             {% csrf_token %}
             <input type="hidden" name="quantity" value="1">
             <button type="submit" class="btn btn-warning btn-sm w-100 add-to-cart-btn" {% if product.stock == 0 %}disabled{% endif %}>
