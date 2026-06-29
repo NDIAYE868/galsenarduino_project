@@ -6,24 +6,14 @@ class CheckoutForm(forms.ModelForm):
         model = Order
         fields = [
             "first_name",
-            "last_name",
             "whatsapp_number",
             "address",
-            "city",
-            "region",
-            "delivery_method",
-            "payment_method",
         ]
 
         labels = {
             "first_name": "Prénom",
-            "last_name": "Nom",
             "whatsapp_number": "Numéro WhatsApp",
             "address": "Adresse complète",
-            "city": "Ville",
-            "region": "Région",
-            "delivery_method": "Mode de livraison",
-            "payment_method": "Mode de paiement",
         }
 
         widgets = {
@@ -31,36 +21,15 @@ class CheckoutForm(forms.ModelForm):
                 "class": "form-control",
                 "placeholder": "Ex : Awa"
             }),
-            "last_name": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Ex : Diop"
-            }),
             "whatsapp_number": forms.TextInput(attrs={
                 "class": "form-control",
                 "placeholder": "Ex : 77 123 45 67",
                 "pattern": "[0-9]{9}"
             }),
-
             "address": forms.Textarea(attrs={
                 "class": "form-control",
                 "rows": 3,
                 "placeholder": "Ex : Liberté 6, Dakar"
-            }),
-
-            "city": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Ex : Dakar"
-            }),
-            "region": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Ex : Région de Dakar"
-            }),
-
-            "delivery_method": forms.Select(attrs={
-                "class": "form-select"
-            }),
-            "payment_method": forms.Select(attrs={
-                "class": "form-select"
             }),
         }
 

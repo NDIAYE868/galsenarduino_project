@@ -77,13 +77,12 @@ class Order(models.Model):
 
     reference = models.CharField(max_length=20, unique=True)
     first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100, blank=True, default="")
     whatsapp_number = models.CharField(max_length=20)
     address = models.TextField()
-    city = models.CharField(max_length=100)
     region = models.CharField(max_length=100, blank=True)
-    delivery_method = models.CharField(max_length=20, choices=DELIVERY_METHOD_CHOICES)
-    payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES, default='cod')
+    delivery_method = models.CharField(max_length=20, choices=DELIVERY_METHOD_CHOICES, default='dakar', blank=True)
+    payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES, default='cod', blank=True)
 
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     shipping_fees = models.DecimalField(max_digits=10, decimal_places=2, default=0)
