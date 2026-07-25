@@ -60,16 +60,6 @@
     </div>
 
   </div>
-
-  <!-- Boutons de navigation -->
-  <button class="carousel-control-prev" type="button" data-bs-target="#galsenSlider" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Précédent</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#galsenSlider" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Suivant</span>
-  </button>
 </div>
 <!-- ================= FIN DU SLIDER ================= -->
 
@@ -121,20 +111,32 @@
 
   <!-- ================= SIDEBAR ================= -->
   <div class="col-lg-3 mb-4">
-    <div class="card shadow-sm border-0 sticky-sidebar">
-      <div class="card-header bg-dark text-white">
-        <h5 class="mb-0"><i class="bi bi-grid"></i> Catégories</h5>
-      </div>
-      <div class="list-group list-group-flush">
-        {% for cat in categories %}
-        <a href="{% url 'shop:product_list_by_category' slug=cat.slug %}"
-          class="list-group-item d-flex justify-content-between category-item animate__animated">
-          {{ cat.name }}
-          <span class="badge bg-dark">{{ cat.products.count }}</span>
-        </a>
-        {% empty %}
-        <div class="list-group-item text-muted">Aucune catégorie</div>
-        {% endfor %}
+    <!-- Bouton pour mobile pour afficher/masquer les catégories -->
+    <button class="btn btn-warning w-100 d-lg-none mb-3 fw-bold d-flex justify-content-between align-items-center shadow-sm collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#categoriesCollapse" aria-expanded="false" aria-controls="categoriesCollapse">
+      <span>
+        <i class="bi bi-grid me-2"></i>
+        <span class="text-show">Afficher les catégories</span>
+        <span class="text-hide">Masquer les catégories</span>
+      </span>
+      <i class="bi bi-chevron-down toggle-chevron"></i>
+    </button>
+
+    <div class="collapse d-lg-block sticky-sidebar" id="categoriesCollapse">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white d-none d-lg-block">
+          <h5 class="mb-0"><i class="bi bi-grid"></i> Catégories</h5>
+        </div>
+        <div class="list-group list-group-flush">
+          {% for cat in categories %}
+          <a href="{% url 'shop:product_list_by_category' slug=cat.slug %}"
+            class="list-group-item d-flex justify-content-between category-item animate__animated">
+            {{ cat.name }}
+            <span class="badge bg-dark">{{ cat.products.count }}</span>
+          </a>
+          {% empty %}
+          <div class="list-group-item text-muted">Aucune catégorie</div>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>

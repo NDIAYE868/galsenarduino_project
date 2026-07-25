@@ -792,3 +792,80 @@ footer a.footer-link:hover {
     opacity: 1;
 }
 
+/* Cohérence de la couleur jaune avec l'accueil et lisibilité sur fond blanc */
+.text-warning {
+    color: #e0a800 !important;
+}
+
+/* Style de l'onglet actif dans la barre de navigation */
+.navbar-dark .navbar-nav .nav-link.active {
+    color: #ffc107 !important;
+    font-weight: 700 !important;
+}
+
+/* Texte dynamique pour les boutons de collapse mobile (Afficher / Masquer) */
+button[data-bs-toggle="collapse"].collapsed .text-hide {
+    display: none;
+}
+button[data-bs-toggle="collapse"]:not(.collapsed) .text-show {
+    display: none;
+}
+button[data-bs-toggle="collapse"].collapsed .text-show {
+    display: inline;
+}
+button[data-bs-toggle="collapse"]:not(.collapsed) .text-hide {
+    display: inline;
+}
+
+/* Rotation de l'icône chevron des boutons de collapse mobile */
+button[data-bs-toggle="collapse"] .toggle-chevron {
+    transition: transform 0.3s ease;
+}
+button[data-bs-toggle="collapse"]:not(.collapsed) .toggle-chevron {
+    transform: rotate(180deg);
+}
+
+/* Barre de recherche mobile stylisée et arrondie sans bouton à droite */
+.search-mobile-wrapper {
+    border-radius: 50px !important;
+    overflow: hidden;
+    border: 2px solid #ffc107 !important;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.15);
+    background-color: #f8f9fa;
+}
+
+.search-mobile-wrapper .form-control {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.search-mobile-wrapper .form-control:focus {
+    box-shadow: none;
+    background-color: #ffffff;
+}
+
+/* ================= SUPPRESSION DU BLEU BOOTSTRAP SUR TOUT LE SITE ================= */
+
+/* Focus sur tous les champs de saisie (inputs, select, textarea) */
+.form-control:focus,
+.form-select:focus {
+    border-color: #ffc107 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25) !important;
+}
+
+/* Focus et état coché pour les cases à cocher (checkboxes) et boutons radio */
+.form-check-input:checked {
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
+}
+
+.form-check-input:focus {
+    border-color: #ffc107 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25) !important;
+}
+
+/* Liens du site (boutons liens ou texte) */
+a:focus-visible {
+    outline: 2px solid #ffc107 !important;
+}
+

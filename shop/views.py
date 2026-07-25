@@ -50,6 +50,11 @@ def product_list(request, slug=None):
     if in_stock == "1":
         products = products.filter(stock__gt=0)
 
+    # Sorting
+    sort_by = request.GET.get("sort")
+    if sort_by in ["name", "-name", "price", "-price", "-created_at"]:
+        products = products.order_by(sort_by)
+
     context = {
         "category": category,
         "categories": categories,

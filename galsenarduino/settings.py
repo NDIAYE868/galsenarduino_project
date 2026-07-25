@@ -123,3 +123,19 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1"
 ]
+
+# Configuration des adresses de notification par e-mail
+CONTACT_EMAIL = "papesaliou868@yahoo.com"
+ORDER_NOTIFICATION_EMAIL = "papesaliou868@yahoo.com"
+
+# Configuration de l'envoi d'e-mails via Yahoo SMTP
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.mail.yahoo.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "papesaliou868@yahoo.com"
+# Remplacez la valeur ci-dessous par votre mot de passe d'application généré dans votre compte Yahoo
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "gvhfpuwvsndxefqg")
+DEFAULT_FROM_EMAIL = "papesaliou868@yahoo.com"
+
+

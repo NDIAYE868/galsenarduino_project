@@ -14,30 +14,32 @@
     <!-- Conteneur principal de l'image avec navigation -->
     <div class="main-image-container mb-3 position-relative">
         <div class="image-gallery-wrapper">
-            <div class="image-container">
-                <img id="mainProductImage"
-                     src="{{ product.image.url }}"
-                     alt="{{ product.name }}"
-                     class="product-detail-image">
+            <!-- Conteneur de défilement horizontal tactile (CSS scroll snap) -->
+            <div class="gallery-scroll-container" id="galleryScrollContainer">
+                <div class="gallery-slide" id="slide-0" data-src="{{ product.image.url }}">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-detail-image">
+                </div>
+                {% for img in product.images.all %}
+                <div class="gallery-slide" id="slide-{{ forloop.counter }}" data-src="{{ img.image.url }}">
+                    <img src="{{ img.image.url }}" alt="{{ product.name }} - Image {{ forloop.counter|add:1 }}" class="product-detail-image">
+                </div>
+                {% endfor %}
             </div>
             
-            <!-- Boutons de navigation -->
-            <button class="gallery-nav-btn gallery-prev-btn" onclick="changeImage(-1)">
+            {% if product.images.all %}
+            <!-- Boutons de navigation (visibles sur desktop uniquement pour éviter de gêner le tactile) -->
+            <button class="gallery-nav-btn gallery-prev-btn d-none d-md-flex" onclick="changeImage(-1)">
                 <i class="bi bi-chevron-left"></i>
             </button>
-            <button class="gallery-nav-btn gallery-next-btn" onclick="changeImage(1)">
+            <button class="gallery-nav-btn gallery-next-btn d-none d-md-flex" onclick="changeImage(1)">
                 <i class="bi bi-chevron-right"></i>
             </button>
             
             <!-- Indicateur d'image -->
             <div class="image-counter">
-                <span id="currentImage">1</span>/<span id="totalImages">1</span>
+                <span id="currentImage">1</span>/<span id="totalImages">{{ product.images.count|add:1 }}</span>
             </div>
-            
-            <!-- Indicateur de swipe mobile -->
-            <div class="swipe-indicator">
-                ⬅️ Swipe pour naviguer ➡️
-            </div>
+            {% endif %}
         </div>
     </div>
 
@@ -157,45 +159,63 @@
 </div>
 {% endif %}
 
+<!-- Lightbox / Zoom Overlay -->
+<div class="image-zoom-overlay" id="imageZoomOverlay" onclick="toggleZoom(false)">
+    <img id="zoomedImage" src="" alt="Image Zoomée">
+</div>
+
 <style>
 
       
 /* Styles pour la galerie d'images */
 .image-gallery-wrapper {
     position: relative;
-    overflow: hidden;
     border-radius: 0.5rem;
-    cursor: grab;
-    user-select: none;
+    overflow: hidden;
     background: #f8f9fa;
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
+    width: 100%;
 }
 
-/* Conteneur d'image avec centrage parfait */
-.image-container {
+/* Conteneur de défilement tactile natif */
+.gallery-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
     width: 100%;
     height: 400px;
+}
+
+.gallery-scroll-container::-webkit-scrollbar {
+    display: none; /* Masquer la barre de défilement */
+}
+
+.gallery-scroll-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.gallery-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #f8f9fa;
-    margin: 0;
-    padding: 10px;
+    padding: 20px;
     box-sizing: border-box;
+    cursor: zoom-in;
 }
 
 .product-detail-image {
-    max-width: calc(100% - 40px);
+    max-width: 100%;
     max-height: 100%;
     width: auto;
     height: auto;
     object-fit: contain;
-    transition: opacity 0.3s ease;
     display: block;
     margin: 0 auto;
 }
@@ -533,84 +553,48 @@
 <script>
 // Variables globales pour la galerie
 let currentImageIndex = 0;
-let imageSources = [];
-let touchStartX = 0;
-let touchEndX = 0;
+let totalImagesCount = 1;
 
-// Initialisation de la galerie
 document.addEventListener('DOMContentLoaded', function() {
     initializeGallery();
-    initArrowAnimations();
-    
-    // Détection mobile pour l'indicateur de swipe
-    if ('ontouchstart' in window) {
-        const galleryWrapper = document.querySelector('.image-gallery-wrapper');
-        galleryWrapper.classList.add('mobile-swipe');
-        
-        // Masquer l'indicateur après 3 secondes
-        setTimeout(() => {
-            galleryWrapper.classList.remove('mobile-swipe');
-        }, 3000);
-    }
 });
 
 function initializeGallery() {
-    // Récupérer toutes les images
-    const mainImage = document.getElementById('mainProductImage');
-    const thumbnails = document.querySelectorAll('.product-thumb');
+    const container = document.getElementById('galleryScrollContainer');
+    const totalImagesSpan = document.getElementById('totalImages');
     
-    // Ajouter l'image principale
-    imageSources.push({
-        src: mainImage.src,
-        element: mainImage
-    });
-    
-    // Ajouter les images supplémentaires
-    thumbnails.forEach((thumb, index) => {
-        if (index > 0) { // index 0 est l'image principale déjà ajoutée
-            imageSources.push({
-                src: thumb.src,
-                element: thumb
+    if (container) {
+        const slides = container.querySelectorAll('.gallery-slide');
+        totalImagesCount = slides.length;
+        if (totalImagesSpan) totalImagesSpan.textContent = totalImagesCount;
+        
+        // Synchronisation du défilement avec les miniatures et le compteur
+        let isScrolling;
+        container.addEventListener('scroll', function() {
+            window.clearTimeout(isScrolling);
+            isScrolling = setTimeout(function() {
+                const width = container.clientWidth;
+                const index = Math.round(container.scrollLeft / width);
+                if (index !== currentImageIndex && index >= 0 && index < totalImagesCount) {
+                    currentImageIndex = index;
+                    updateGalleryState(index);
+                }
+            }, 50);
+        });
+        
+        // Événement clic pour le zoom
+        slides.forEach((slide) => {
+            slide.addEventListener('click', function() {
+                const img = slide.querySelector('img');
+                if (img) {
+                    toggleZoom(true, img.src);
+                }
             });
-        }
-    });
-    
-    // Mettre à jour le compteur
-    document.getElementById('totalImages').textContent = imageSources.length;
-    
-    // Événements tactiles
-    setupTouchEvents();
+        });
+    }
     
     // Événements clavier
     document.addEventListener('keydown', handleKeyPress);
-}
-
-function setupTouchEvents() {
-    const galleryWrapper = document.querySelector('.image-gallery-wrapper');
-    
-    galleryWrapper.addEventListener('touchstart', function(e) {
-        touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-    
-    galleryWrapper.addEventListener('touchend', function(e) {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    }, { passive: true });
-}
-
-function handleSwipe() {
-    const swipeThreshold = 50;
-    const diff = touchStartX - touchEndX;
-    
-    if (Math.abs(diff) > swipeThreshold) {
-        if (diff > 0) {
-            // Swipe gauche - image suivante
-            changeImage(1);
-        } else {
-            // Swipe droit - image précédente
-            changeImage(-1);
-        }
-    }
 }
 
 function handleKeyPress(e) {
@@ -621,91 +605,54 @@ function handleKeyPress(e) {
     }
 }
 
-function changeImage(direction) {
-    const newIndex = (currentImageIndex + direction + imageSources.length) % imageSources.length;
-    showImage(newIndex, direction);
-}
-
-function showImage(index, direction = 0) {
-    if (index < 0 || index >= imageSources.length) return;
-    
-    const mainImage = document.getElementById('mainProductImage');
+function updateGalleryState(index) {
     const thumbnails = document.querySelectorAll('.product-thumb');
+    const currentImgSpan = document.getElementById('currentImage');
     
-    // Animation de transition
-    const animationClass = direction > 0 ? 'slide-left' : 'slide-right';
-    mainImage.classList.add(animationClass);
+    if (currentImgSpan) currentImgSpan.textContent = index + 1;
     
-    // Changer la source de l'image
-    setTimeout(() => {
-        mainImage.src = imageSources[index].src;
-        mainImage.alt = "{{ product.name }} - Image " + (index + 1);
-        
-        // Mettre à jour les miniatures actives
-        thumbnails.forEach(thumb => {
-            thumb.classList.remove('active');
-            if (parseInt(thumb.getAttribute('data-index')) === index) {
-                thumb.classList.add('active');
-            }
-        });
-        
-        // Mettre à jour l'index courant et le compteur
-        currentImageIndex = index;
-        document.getElementById('currentImage').textContent = index + 1;
-        
-        // Retirer l'animation
-        setTimeout(() => {
-            mainImage.classList.remove(animationClass);
-        }, 50);
-    }, 200);
-}
-
-// Animation des flèches
-function initArrowAnimations() {
-    const navButtons = document.querySelectorAll('.gallery-nav-btn');
-    
-    // Ajouter l'animation pulsante sur mobile
-    if ('ontouchstart' in window) {
-        navButtons.forEach(btn => {
-            btn.classList.add('mobile-pulse');
-        });
-        
-        // Stopper l'animation après 5 secondes
-        setTimeout(() => {
-            navButtons.forEach(btn => {
-                btn.classList.remove('mobile-pulse');
-            });
-        }, 5000);
-    }
-    
-    // Animation au clic
-    navButtons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            // Effet de rebond
-            this.style.transform = 'translateY(-50%) scale(0.9)';
-            
-            setTimeout(() => {
-                this.style.transform = 'translateY(-50%) scale(1.1)';
-            }, 150);
-            
-            setTimeout(() => {
-                this.style.transform = 'translateY(-50%) scale(1)';
-            }, 300);
-        });
-    });
-}
-
-// Animation du bouton d'ajout au panier
-const addToCartBtn = document.querySelector('.add-to-cart-detail');
-if (addToCartBtn) {
-    addToCartBtn.addEventListener('click', function() {
-        if (!this.disabled) {
-            this.classList.add('animate__pulse');
-            setTimeout(() => {
-                this.classList.remove('animate__pulse');
-            }, 600);
+    thumbnails.forEach(thumb => {
+        thumb.classList.remove('active');
+        if (parseInt(thumb.getAttribute('data-index')) === index) {
+            thumb.classList.add('active');
         }
     });
+}
+
+function showImage(index) {
+    const container = document.getElementById('galleryScrollContainer');
+    if (!container || index < 0 || index >= totalImagesCount) return;
+    
+    const width = container.clientWidth;
+    container.scrollTo({
+        left: index * width,
+        behavior: 'smooth'
+    });
+    
+    currentImageIndex = index;
+    updateGalleryState(index);
+}
+
+function changeImage(direction) {
+    const newIndex = (currentImageIndex + direction + totalImagesCount) % totalImagesCount;
+    showImage(newIndex);
+}
+
+// Fonction pour ouvrir/fermer le zoom / lightbox
+function toggleZoom(show, src = '') {
+    const overlay = document.getElementById('imageZoomOverlay');
+    const zoomedImg = document.getElementById('zoomedImage');
+    
+    if (!overlay || !zoomedImg) return;
+    
+    if (show) {
+        zoomedImg.src = src;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Bloquer le défilement
+    } else {
+        overlay.classList.remove('active');
+        document.body.style.overflow = ''; // Restaurer le défilement
+    }
 }
 </script>
 {% endblock %}

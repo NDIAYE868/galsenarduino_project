@@ -108,3 +108,21 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product.name} x {self.quantity}"
+
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=150, verbose_name="Nom complet")
+    email = models.EmailField(verbose_name="Adresse email")
+    whatsapp = models.CharField(max_length=20, blank=True, verbose_name="Numéro WhatsApp")
+    message = models.TextField(verbose_name="Message")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date d'envoi")
+    is_read = models.BooleanField(default=False, verbose_name="Lu")
+
+    class Meta:
+        verbose_name = "Message de contact"
+        verbose_name_plural = "Messages de contact"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"Message de {self.name} ({self.email})"
+

@@ -11,63 +11,80 @@
 <div class="row">
   <!-- FILTRES & CATÉGORIES -->
   <div class="col-md-3 mb-4">
-    <div class="sticky-sidebar">
-      <div class="card border-0 shadow-sm mb-4">
-        <div class="card-header bg-dark text-white">
-          <h5 class="mb-0"><i class="bi bi-grid"></i> Catégories</h5>
-        </div>
-        <div class="list-group list-group-flush">
-          <li class="list-group-item {% if not category %}active{% endif %}">
-            <a href="{% url 'shop:product_list' %}" class="{% if not category %}text-white{% else %}text-dark{% endif %} text-decoration-none d-flex justify-content-between">
-              <span>Toutes les catégories</span>
-              <span class="badge {% if not category %}bg-warning text-dark{% else %}bg-dark{% endif %}">{{ products.count }}</span>
-            </a>
-          </li>
-          {% for cat in categories %}
-          <li class="list-group-item {% if category == cat %}active{% endif %} category-item">
-            <a href="{% url 'shop:product_list_by_category' slug=cat.slug %}" 
-               class="{% if category == cat %}text-white{% else %}text-dark{% endif %} text-decoration-none d-flex justify-content-between">
-              {{ cat.name }}
-              <span class="badge {% if category == cat %}bg-warning text-dark{% else %}bg-dark{% endif %}">{{ cat.products.count }}</span>
-            </a>
-          </li>
-          {% endfor %}
-        </div>
-      </div>
+    <!-- Bouton pour mobile pour afficher/masquer le filtre et les catégories -->
+    <button class="btn btn-warning w-100 d-md-none mb-3 fw-bold d-flex justify-content-between align-items-center shadow-sm collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-expanded="false" aria-controls="sidebarCollapse">
+      <span>
+        <i class="bi bi-funnel me-2"></i>
+        <span class="text-show">Afficher les Catégories & Filtres</span>
+        <span class="text-hide">Masquer les Catégories & Filtres</span>
+      </span>
+      <i class="bi bi-chevron-down toggle-chevron"></i>
+    </button>
 
-      <div class="card border-0 shadow-sm">
-        <div class="card-header bg-dark text-white">
-          <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtres</h5>
+    <div class="sticky-sidebar">
+      <div class="collapse d-md-block" id="sidebarCollapse">
+        <!-- CARD 1: Catégories -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-dark text-white d-none d-md-block">
+            <h5 class="mb-0"><i class="bi bi-grid"></i> Catégories</h5>
+          </div>
+          <div class="list-group list-group-flush">
+            <li class="list-group-item {% if not category %}active{% endif %}">
+              <a href="{% url 'shop:product_list' %}" class="{% if not category %}text-white{% else %}text-dark{% endif %} text-decoration-none d-flex justify-content-between">
+                <span>Toutes les catégories</span>
+                <span class="badge {% if not category %}bg-warning text-dark{% else %}bg-dark{% endif %}">{{ products.count }}</span>
+              </a>
+            </li>
+            {% for cat in categories %}
+            <li class="list-group-item {% if category == cat %}active{% endif %} category-item">
+              <a href="{% url 'shop:product_list_by_category' slug=cat.slug %}" 
+                 class="{% if category == cat %}text-white{% else %}text-dark{% endif %} text-decoration-none d-flex justify-content-between">
+                {{ cat.name }}
+                <span class="badge {% if category == cat %}bg-warning text-dark{% else %}bg-dark{% endif %}">{{ cat.products.count }}</span>
+              </a>
+            </li>
+            {% endfor %}
+          </div>
         </div>
-        <div class="card-body">
-          <form method="get">
-            <div class="mb-3">
-              <label class="form-label fw-bold text-dark">Prix minimum</label>
-              <input type="number" class="form-control" name="price_min" value="{{ request.GET.price_min }}" placeholder="0 FCFA">
-            </div>
-            <div class="mb-3">
-              <label class="form-label fw-bold text-dark">Prix maximum</label>
-              <input type="number" class="form-control" name="price_max" value="{{ request.GET.price_max }}" placeholder="50 000 FCFA">
-            </div>
-            <div class="form-check mb-3">
-              <input class="form-check-input" type="checkbox" name="in_stock" value="1" id="in_stock"
-                     {% if request.GET.in_stock %}checked{% endif %}>
-              <label class="form-check-label fw-bold text-dark" for="in_stock">
-                En stock uniquement
-              </label>
-            </div>
-            <button type="submit" class="btn btn-dark w-100">
-              <i class="bi bi-filter me-2"></i>Appliquer les filtres
-            </button>
-            {% if request.GET.price_min or request.GET.price_max or request.GET.in_stock %}
-            <a href="{% url 'shop:product_list' %}" class="btn btn-outline-dark w-100 mt-2">
-              <i class="bi bi-x-circle me-2"></i>Effacer les filtres
-            </a>
-            {% endif %}
-          </form>
+
+        <!-- CARD 2: Filtres -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-dark text-white d-none d-md-block">
+            <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtres</h5>
+          </div>
+          <div class="card-body">
+            <form method="get">
+              {% if request.GET.sort %}
+              <input type="hidden" name="sort" value="{{ request.GET.sort }}">
+              {% endif %}
+              <div class="mb-3">
+                <label class="form-label fw-bold text-dark">Prix minimum</label>
+                <input type="number" class="form-control" name="price_min" value="{{ request.GET.price_min }}" placeholder="0 FCFA">
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold text-dark">Prix maximum</label>
+                <input type="number" class="form-control" name="price_max" value="{{ request.GET.price_max }}" placeholder="50 000 FCFA">
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="in_stock" value="1" id="in_stock"
+                       {% if request.GET.in_stock %}checked{% endif %}>
+                <label class="form-check-label fw-bold text-dark" for="in_stock">
+                  En stock uniquement
+                </label>
+              </div>
+              <button type="submit" class="btn btn-dark w-100">
+                <i class="bi bi-filter me-2"></i>Appliquer les filtres
+              </button>
+              {% if request.GET.price_min or request.GET.price_max or request.GET.in_stock %}
+              <a href="{% url 'shop:product_list' %}" class="btn btn-outline-dark w-100 mt-2">
+                <i class="bi bi-x-circle me-2"></i>Effacer les filtres
+              </a>
+              {% endif %}
+            </form>
+          </div>
         </div>
-      </div>
-    </div>
+      </div> <!-- /collapse -->
+    </div> <!-- /sticky-sidebar -->
   </div>
 
   <!-- LISTE PRODUITS -->
@@ -84,11 +101,11 @@
           <i class="bi bi-sort-down me-1"></i>Trier par
         </button>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item text-dark" href="?sort=name">Nom A-Z</a></li>
-          <li><a class="dropdown-item text-dark" href="?sort=-name">Nom Z-A</a></li>
-          <li><a class="dropdown-item text-dark" href="?sort=price">Prix croissant</a></li>
-          <li><a class="dropdown-item text-dark" href="?sort=-price">Prix décroissant</a></li>
-          <li><a class="dropdown-item text-dark" href="?sort=-created_at">Nouveautés</a></li>
+          <li><a class="dropdown-item text-dark" href="?sort=name{% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}{% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}{% if request.GET.in_stock %}&in_stock={{ request.GET.in_stock }}{% endif %}">Nom A-Z</a></li>
+          <li><a class="dropdown-item text-dark" href="?sort=-name{% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}{% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}{% if request.GET.in_stock %}&in_stock={{ request.GET.in_stock }}{% endif %}">Nom Z-A</a></li>
+          <li><a class="dropdown-item text-dark" href="?sort=price{% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}{% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}{% if request.GET.in_stock %}&in_stock={{ request.GET.in_stock }}{% endif %}">Prix croissant</a></li>
+          <li><a class="dropdown-item text-dark" href="?sort=-price{% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}{% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}{% if request.GET.in_stock %}&in_stock={{ request.GET.in_stock }}{% endif %}">Prix décroissant</a></li>
+          <li><a class="dropdown-item text-dark" href="?sort=-created_at{% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}{% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}{% if request.GET.in_stock %}&in_stock={{ request.GET.in_stock }}{% endif %}">Nouveautés</a></li>
         </ul>
       </div>
     </div>
