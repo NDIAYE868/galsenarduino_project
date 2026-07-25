@@ -234,7 +234,8 @@ def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            messages.success(request, "Votre message a été envoyé (simulation).")
+            form.save()
+            messages.success(request, "Votre message a bien été envoyé !")
             return redirect("shop:contact")
     else:
         form = ContactForm()

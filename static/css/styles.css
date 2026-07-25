@@ -847,8 +847,12 @@ button[data-bs-toggle="collapse"]:not(.collapsed) .toggle-chevron {
 /* ================= SUPPRESSION DU BLEU BOOTSTRAP SUR TOUT LE SITE ================= */
 
 /* Focus sur tous les champs de saisie (inputs, select, textarea) */
+input:focus,
+textarea:focus,
+select:focus,
 .form-control:focus,
 .form-select:focus {
+    outline: none !important;
     border-color: #ffc107 !important;
     box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25) !important;
 }
