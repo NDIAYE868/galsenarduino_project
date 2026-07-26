@@ -155,6 +155,23 @@
               </ul>
             </li>
 
+            <!-- FILTRES -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle {% if request.GET.sort or request.GET.price_min or request.GET.price_max %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown">
+                <i class="bi bi-funnel me-1"></i>Filtres
+              </a>
+              <ul class="dropdown-menu animate__animated animate__fadeIn">
+                <li><span class="dropdown-header text-uppercase small text-muted">Trier par</span></li>
+                <li><a class="dropdown-item" href="{% url 'shop:product_list' %}?sort=price_asc"><i class="bi bi-sort-numeric-down me-2"></i>Prix croissant</a></li>
+                <li><a class="dropdown-item" href="{% url 'shop:product_list' %}?sort=price_desc"><i class="bi bi-sort-numeric-up-alt me-2"></i>Prix décroissant</a></li>
+                <li><a class="dropdown-item" href="{% url 'shop:product_list' %}?sort=name_asc"><i class="bi bi-sort-alpha-down me-2"></i>Nom (A - Z)</a></li>
+                {% if request.GET.sort or request.GET.price_min or request.GET.price_max %}
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger fw-bold" href="{% url 'shop:product_list' %}"><i class="bi bi-x-circle me-2"></i>Réinitialiser les filtres</a></li>
+                {% endif %}
+              </ul>
+            </li>
+
             <li class="nav-item">
               <a class="nav-link {% if '/catalogue/' in request.path %}active{% endif %}" href="{% url 'shop:product_list' %}">
                 <i class="bi bi-box-seam me-1"></i>Catalogue

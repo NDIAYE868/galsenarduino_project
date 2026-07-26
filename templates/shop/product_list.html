@@ -11,19 +11,28 @@
 <div class="row">
   <!-- FILTRES & CATÉGORIES -->
   <div class="col-md-3 mb-4">
-    <!-- Bouton pour mobile pour afficher/masquer le filtre et les catégories -->
-    <button class="btn btn-warning w-100 d-md-none mb-3 fw-bold d-flex justify-content-between align-items-center shadow-sm collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-expanded="false" aria-controls="sidebarCollapse">
+    <!-- Bouton Mobile 1: Catégories -->
+    <button class="btn btn-warning w-100 d-md-none mb-2 fw-bold d-flex justify-content-between align-items-center shadow-sm collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#categoriesCollapse" aria-expanded="false">
+      <span>
+        <i class="bi bi-grid me-2"></i>
+        Catégories
+      </span>
+      <i class="bi bi-chevron-down toggle-chevron"></i>
+    </button>
+
+    <!-- Bouton Mobile 2: Filtres -->
+    <button class="btn btn-warning w-100 d-md-none mb-3 fw-bold d-flex justify-content-between align-items-center shadow-sm collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#filtersCollapse" aria-expanded="false">
       <span>
         <i class="bi bi-funnel me-2"></i>
-        Catégories & Filtres
+        Filtres
       </span>
       <i class="bi bi-chevron-down toggle-chevron"></i>
     </button>
 
     <div class="sticky-sidebar">
-      <div class="collapse d-md-block" id="sidebarCollapse">
-        <!-- CARD 1: Catégories -->
-        <div class="card border-0 shadow-sm mb-4">
+      <!-- CARD 1: Catégories -->
+      <div class="collapse d-md-block mb-3" id="categoriesCollapse">
+        <div class="card border-0 shadow-sm">
           <div class="card-header bg-dark text-white d-none d-md-block">
             <h5 class="mb-0"><i class="bi bi-grid"></i> Catégories</h5>
           </div>
@@ -45,8 +54,10 @@
             {% endfor %}
           </div>
         </div>
+      </div>
 
-        <!-- CARD 2: Filtres -->
+      <!-- CARD 2: Filtres -->
+      <div class="collapse d-md-block" id="filtersCollapse">
         <div class="card border-0 shadow-sm">
           <div class="card-header bg-dark text-white d-none d-md-block">
             <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtres</h5>
@@ -56,25 +67,18 @@
               {% if request.GET.sort %}
               <input type="hidden" name="sort" value="{{ request.GET.sort }}">
               {% endif %}
-              <div class="mb-3">
+              <div class="form-group mb-3">
                 <label class="form-label fw-bold text-dark">Prix minimum</label>
                 <input type="number" class="form-control" name="price_min" value="{{ request.GET.price_min }}" placeholder="0 FCFA">
               </div>
-              <div class="mb-3">
+              <div class="form-group mb-3">
                 <label class="form-label fw-bold text-dark">Prix maximum</label>
                 <input type="number" class="form-control" name="price_max" value="{{ request.GET.price_max }}" placeholder="50 000 FCFA">
-              </div>
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" name="in_stock" value="1" id="in_stock"
-                       {% if request.GET.in_stock %}checked{% endif %}>
-                <label class="form-check-label fw-bold text-dark" for="in_stock">
-                  En stock uniquement
-                </label>
               </div>
               <button type="submit" class="btn btn-dark w-100">
                 <i class="bi bi-filter me-2"></i>Appliquer les filtres
               </button>
-              {% if request.GET.price_min or request.GET.price_max or request.GET.in_stock %}
+              {% if request.GET.price_min or request.GET.price_max %}
               <a href="{% url 'shop:product_list' %}" class="btn btn-outline-dark w-100 mt-2">
                 <i class="bi bi-x-circle me-2"></i>Effacer les filtres
               </a>
@@ -82,7 +86,7 @@
             </form>
           </div>
         </div>
-      </div> <!-- /collapse -->
+      </div>
     </div> <!-- /sticky-sidebar -->
   </div>
 

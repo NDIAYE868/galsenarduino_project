@@ -52,6 +52,15 @@ def product_list(request, slug=None):
 
     # Sorting
     sort_by = request.GET.get("sort")
+    if sort_by == "price_asc":
+        sort_by = "price"
+    elif sort_by == "price_desc":
+        sort_by = "-price"
+    elif sort_by == "name_asc":
+        sort_by = "name"
+    elif sort_by == "name_desc":
+        sort_by = "-name"
+
     if sort_by in ["name", "-name", "price", "-price", "-created_at"]:
         products = products.order_by(sort_by)
 

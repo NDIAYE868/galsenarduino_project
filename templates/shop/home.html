@@ -109,10 +109,11 @@
 <!-- ================= CONTENU PRINCIPAL ================= -->
 <div class="row">
 
-  <!-- ================= SIDEBAR ================= -->
+  <!-- ================= SIDEBAR (CATÉGORIES & FILTRES) ================= -->
   <div class="col-lg-3 mb-4">
-    <!-- Bouton pour mobile pour afficher/masquer les catégories -->
-    <button class="btn btn-warning w-100 d-lg-none mb-3 fw-bold d-flex justify-content-between align-items-center shadow-sm collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#categoriesCollapse" aria-expanded="false" aria-controls="categoriesCollapse">
+
+    <!-- Bouton Mobile 1: Catégories -->
+    <button class="btn btn-warning w-100 d-lg-none mb-2 fw-bold d-flex justify-content-between align-items-center shadow-sm collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#categoriesHomeCollapse" aria-expanded="false" aria-controls="categoriesHomeCollapse">
       <span>
         <i class="bi bi-grid me-2"></i>
         Catégories
@@ -120,24 +121,74 @@
       <i class="bi bi-chevron-down toggle-chevron"></i>
     </button>
 
-    <div class="collapse d-lg-block sticky-sidebar" id="categoriesCollapse">
-      <div class="card shadow-sm border-0">
-        <div class="card-header bg-dark text-white d-none d-lg-block">
-          <h5 class="mb-0"><i class="bi bi-grid"></i> Catégories</h5>
-        </div>
-        <div class="list-group list-group-flush">
-          {% for cat in categories %}
-          <a href="{% url 'shop:product_list_by_category' slug=cat.slug %}"
-            class="list-group-item d-flex justify-content-between category-item animate__animated">
-            {{ cat.name }}
-            <span class="badge bg-dark">{{ cat.products.count }}</span>
-          </a>
-          {% empty %}
-          <div class="list-group-item text-muted">Aucune catégorie</div>
-          {% endfor %}
+    <!-- Bouton Mobile 2: Filtres -->
+    <button class="btn btn-warning w-100 d-lg-none mb-3 fw-bold d-flex justify-content-between align-items-center shadow-sm collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#filtersHomeCollapse" aria-expanded="false" aria-controls="filtersHomeCollapse">
+      <span>
+        <i class="bi bi-funnel me-2"></i>
+        Filtres
+      </span>
+      <i class="bi bi-chevron-down toggle-chevron"></i>
+    </button>
+
+    <div class="sticky-sidebar">
+      <!-- CARD 1: Catégories -->
+      <div class="collapse d-lg-block mb-3" id="categoriesHomeCollapse">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-dark text-white d-none d-lg-block">
+            <h5 class="mb-0"><i class="bi bi-grid"></i> Catégories</h5>
+          </div>
+          <div class="list-group list-group-flush">
+            {% for cat in categories %}
+            <a href="{% url 'shop:product_list_by_category' slug=cat.slug %}"
+              class="list-group-item d-flex justify-content-between category-item animate__animated">
+              {{ cat.name }}
+              <span class="badge bg-dark">{{ cat.products.count }}</span>
+            </a>
+            {% empty %}
+            <div class="list-group-item text-muted">Aucune catégorie</div>
+            {% endfor %}
+          </div>
         </div>
       </div>
-    </div>
+
+      <!-- CARD 2: Filtres (Nom & Prix) -->
+      <div class="collapse d-lg-block" id="filtersHomeCollapse">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-dark text-white d-none d-lg-block">
+            <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtres</h5>
+          </div>
+          <div class="card-body">
+            <form method="get" action="{% url 'shop:product_list' %}">
+              <!-- Tri par Nom & Prix -->
+              <div class="mb-3">
+                <label class="form-label fw-bold text-dark"><i class="bi bi-sort-down me-1"></i>Trier par</label>
+                <select name="sort" class="form-select">
+                  <option value="">Par défaut</option>
+                  <option value="name_asc">Nom : A à Z</option>
+                  <option value="name_desc">Nom : Z à A</option>
+                  <option value="price_asc">Prix : Croissant</option>
+                  <option value="price_desc">Prix : Décroissant</option>
+                </select>
+              </div>
+
+              <!-- Filtre Prix Min & Max -->
+              <div class="mb-3">
+                <label class="form-label fw-bold text-dark"><i class="bi bi-tag me-1"></i>Prix Min (FCFA)</label>
+                <input type="number" class="form-control" name="price_min" placeholder="Ex: 1000">
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold text-dark"><i class="bi bi-tag-fill me-1"></i>Prix Max (FCFA)</label>
+                <input type="number" class="form-control" name="price_max" placeholder="Ex: 25000">
+              </div>
+
+              <button type="submit" class="btn btn-dark w-100 fw-bold">
+                <i class="bi bi-filter me-2"></i>Appliquer les filtres
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div> <!-- /sticky-sidebar -->
   </div>
 
   <!-- ================= PRODUITS ================= -->
