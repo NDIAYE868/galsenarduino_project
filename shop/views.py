@@ -39,8 +39,6 @@ def _send_order_email(order):
     
     body += (
         f"\n--------------------\n"
-        f"Sous-total : {order.total_amount - order.shipping_fees} FCFA\n"
-        f"Frais de livraison : {order.shipping_fees} FCFA\n"
         f"Montant Total : {order.total_amount} FCFA\n"
     )
     try:
@@ -48,7 +46,7 @@ def _send_order_email(order):
             subject=subject,
             message=body,
             from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[settings.ORDER_NOTIFICATION_EMAIL],
+            recipient_list=[settings.ORDER_NOTIFICATION_EMAIL, "Babacarmbathie856@gmail.com"],
             fail_silently=False,
         )
     except Exception as e:

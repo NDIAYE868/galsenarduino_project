@@ -10,13 +10,31 @@
       {% csrf_token %}
       {{ form.non_field_errors }}
       <div class="mb-3">
-        {{ form.first_name.label_tag }} {{ form.first_name }}
+        {{ form.first_name.label_tag }} 
+        {{ form.first_name }}
+        {% if form.first_name.errors %}
+          <div class="text-danger small mt-1 fw-bold">
+            {% for error in form.first_name.errors %}{{ error }}{% endfor %}
+          </div>
+        {% endif %}
       </div>
       <div class="mb-3">
-        {{ form.whatsapp_number.label_tag }} {{ form.whatsapp_number }}
+        {{ form.whatsapp_number.label_tag }} 
+        {{ form.whatsapp_number }}
+        {% if form.whatsapp_number.errors %}
+          <div class="text-danger small mt-1 fw-bold">
+            {% for error in form.whatsapp_number.errors %}{{ error }}{% endfor %}
+          </div>
+        {% endif %}
       </div>
       <div class="mb-3">
-        {{ form.address.label_tag }} {{ form.address }}
+        {{ form.address.label_tag }} 
+        {{ form.address }}
+        {% if form.address.errors %}
+          <div class="text-danger small mt-1 fw-bold">
+            {% for error in form.address.errors %}{{ error }}{% endfor %}
+          </div>
+        {% endif %}
       </div>
       <button type="submit" class="btn btn-warning" id="submit-btn">
         <span id="submit-text">Confirmer la commande</span>
