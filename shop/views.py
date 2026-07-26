@@ -172,7 +172,7 @@ def cart_detail(request):
             }
         )
 
-    shipping_fees = Decimal("0.00") if total >= Decimal("20000.00") or total == Decimal("0.00") else Decimal("2000.00")
+    shipping_fees = Decimal("0.00")
     grand_total = total + shipping_fees
 
     context = {
@@ -231,7 +231,7 @@ def checkout(request):
         item = cart[str(product.id)]
         total += Decimal(str(item["price"])) * item["quantity"]
 
-    shipping_fees = Decimal("0.00") if total >= Decimal("20000.00") else Decimal("2000.00")
+    shipping_fees = Decimal("0.00")
     grand_total = total + shipping_fees
 
     if request.method == "POST":
