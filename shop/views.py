@@ -1,5 +1,7 @@
 import uuid
 import unicodedata
+import urllib.request
+import urllib.parse
 from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
@@ -79,6 +81,48 @@ def _send_contact_email(msg):
         import logging
         logger = logging.getLogger(__name__)
         logger.error(f"Erreur envoi email contact: {e}")
+
+def _send_whatsapp_message(to_number, message):
+    """Send an automated WhatsApp message via UltraMsg or generic HTTP API."""
+    # Ensure number format is international (Sénégal: 221xxxxxxxxx)
+    clean_number = "".join(c for c in to_number if c.isdigit())
+    if not clean_number.startswith("221") and len(clean_number) == 9:
+        clean_number = "221" + clean_number
+    elif clean_number.startswith("00221"):
+        clean_number = clean_number[2:]
+        
+    api_url = getattr(settings, "WHATSAPP_API_URL", None)
+    instance_id = getattr(settings, "WHATSAPP_INSTANCE_ID", None)
+    token = getattr(settings, "WHATSAPP_TOKEN", None)
+    
+    if not token or not instance_id:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.warning("WhatsApp API non configurée. Message non envoyé.")
+        return False
+        
+    if "instanceXXXXX" in api_url and instance_id:
+        api_url = api_url.replace("instanceXXXXX", instance_id)
+        
+    payload = {
+        "token": token,
+        "to": f"+{clean_number}",
+        "body": message
+    }
+    
+    data = urllib.parse.urlencode(payload).encode("utf-8")
+    req = urllib.request.Request(api_url, data=data, method="POST")
+    req.add_header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+    req.add_header("Content-Type", "application/x-www-form-urlencoded")
+    
+    try:
+        with urllib.request.urlopen(req, timeout=10) as response:
+            return response.status == 200
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Erreur envoi WhatsApp: {e}")
+        return False
 
 def home(request):
     categories = Category.objects.all()
@@ -280,6 +324,17 @@ def checkout(request):
 
                 # 5. Envoi de l'e-mail de notification à l'administrateur
                 _send_order_email(order)
+
+                # 6. Envoi de la confirmation WhatsApp au client
+                whatsapp_msg = (
+                    f"Bonjour {order.first_name},\n\n"
+                    f"Votre commande sur GalsenArduino a été enregistrée avec succès ! 🎉\n\n"
+                    f"Référence : {order.reference}\n"
+                    f"Montant : {order.total_amount} FCFA\n\n"
+                    f"Nous allons la traiter le plus rapidement possible. Un conseiller vous contactera par WhatsApp pour confirmer la livraison.\n\n"
+                    f"Merci pour votre confiance !"
+                )
+                _send_whatsapp_message(order.whatsapp_number, whatsapp_msg)
 
                 messages.success(
                     request,

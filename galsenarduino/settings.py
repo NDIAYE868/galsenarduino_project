@@ -138,4 +138,10 @@ EMAIL_HOST_USER = "papesaliou868@yahoo.com"
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "gvhfpuwvsndxefqg")
 DEFAULT_FROM_EMAIL = "papesaliou868@yahoo.com"
 
+# Configuration WhatsApp API (ex: UltraMsg)
+WHATSAPP_API_URL = os.getenv("WHATSAPP_API_URL", "https://api.ultramsg.com/instance186313/messages/chat")
+WHATSAPP_INSTANCE_ID = os.getenv("WHATSAPP_INSTANCE_ID", "instance186313")
+WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN", "wpnng922iefgvqqy")
+
+
 
