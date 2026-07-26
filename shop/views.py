@@ -1,4 +1,5 @@
 import uuid
+import unicodedata
 from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
@@ -324,16 +325,58 @@ def return_policy(request):
 def terms(request):
     return render(request, "shop/terms.html")
 
+def _normalize_text(text):
+    """Normalize text: convert to lowercase, strip accents, and remove trailing plurals."""
+    if not text:
+        return ""
+    # Strip accents
+    normalized = "".join(
+        c for c in unicodedata.normalize("NFD", text)
+        if unicodedata.category(c) != "Mn"
+    )
+    # Lowercase & strip spaces
+    normalized = normalized.lower().strip()
+    return normalized
+
+def _get_search_terms(query):
+    """Split query into cleaned individual search terms, removing plural suffixes 's' and 'x' where appropriate."""
+    terms = []
+    for word in query.split():
+        norm = _normalize_text(word)
+        if len(norm) > 3:
+            # Strip plural suffixes
+            if norm.endswith("s"):
+                norm = norm[:-1]
+            elif norm.endswith("x"):
+                if norm.endswith("aux") or norm.endswith("eux"):
+                    norm = norm[:-1]
+        if norm:
+            terms.append(norm)
+    return terms
+
 def search(request):
     query = request.GET.get("q", "")
     products = []
     if query:
-        products = Product.objects.filter(
-            Q(name__icontains=query)
-            | Q(short_description__icontains=query)
-            | Q(description__icontains=query)
-            | Q(category__name__icontains=query)
-        ).distinct()
+        terms = _get_search_terms(query)
+        if terms:
+            all_products = Product.objects.filter(is_active=True).select_related('category')
+            matched_products = []
+            for product in all_products:
+                name_norm = _normalize_text(product.name)
+                desc_norm = _normalize_text(product.description)
+                short_norm = _normalize_text(product.short_description)
+                cat_norm = _normalize_text(product.category.name if product.category else "")
+                
+                # Check if ALL terms match the product
+                matches_all = True
+                for term in terms:
+                    if not (term in name_norm or term in desc_norm or term in short_norm or term in cat_norm):
+                        matches_all = False
+                        break
+                if matches_all:
+                    matched_products.append(product)
+            products = matched_products
     return render(request, "shop/search_results.html", {"query": query, "products": products})
 
 # Dans shop/views.py
