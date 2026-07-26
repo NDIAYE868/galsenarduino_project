@@ -195,14 +195,12 @@
 
             <!-- RECHERCHE DESKTOP (masquée sur mobile, panier et checkout) -->
             {% if not '/checkout/' in request.path and not '/panier/' in request.path %}
-            <form class="d-none d-lg-flex me-2" method="get" action="{% url 'shop:search' %}">
-              <div class="input-group input-group-sm">
-                <input class="form-control" type="search" name="q"
-                       placeholder="Rechercher…" value="{{ request.GET.q }}">
-                <button class="btn btn-warning" type="submit">
-                  <i class="bi bi-search"></i>
-                </button>
-              </div>
+            <form class="d-none d-lg-flex me-2 position-relative align-items-center" method="get" action="{% url 'shop:search' %}">
+              <input class="form-control ps-5 pe-3 py-2 rounded-pill search-input-pc" 
+                     type="search" name="q"
+                     placeholder="Rechercher un composant..." value="{{ request.GET.q }}"
+                     style="font-size: 0.85rem;">
+              <i class="bi bi-search position-absolute text-warning" style="left: 18px; font-size: 0.9rem; pointer-events: none;"></i>
             </form>
             {% endif %}
             
