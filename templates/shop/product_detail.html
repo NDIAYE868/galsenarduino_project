@@ -86,7 +86,7 @@
         </div>
         <button type="submit" class="btn btn-warning btn-lg" {% if product.stock == 0 %}disabled{% endif %}>
             <i class="bi bi-cart-plus me-2"></i> 
-            {% if product.stock > 0 %}Ajouter au panier{% else %}Produit indisponible{% endif %}
+            {% if product.stock > 0 %}Ajouter au panier{% else %}Rupture{% endif %}
         </button>
     </form>
 
@@ -148,7 +148,7 @@
   </div>
   <button type="submit" class="btn btn-warning btn-lg" {% if product.stock == 0 %}disabled{% endif %}>
     <i class="bi bi-cart-plus me-2"></i> 
-    {% if product.stock > 0 %}Ajouter au panier{% else %}Produit indisponible{% endif %}
+    {% if product.stock > 0 %}Ajouter au panier{% else %}Rupture{% endif %}
   </button>
 </form>
 
