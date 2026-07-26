@@ -5,8 +5,9 @@ from django.db.models import Q
 from django.contrib import messages
 from django.db import transaction
 from django.http import JsonResponse
-
 from django.http import HttpResponseRedirect
+from django.core.mail import send_mail
+from django.conf import settings
 
 from .models import Category, Product, Order, OrderItem
 from .forms import CheckoutForm, ContactForm
@@ -17,6 +18,68 @@ def _get_cart(session):
 def _save_cart(session, cart):
     session["cart"] = cart
     session.modified = True
+
+def _send_order_email(order):
+    subject = f"[GalsenArduino] Nouvelle Commande - Réf: {order.reference}"
+    body = (
+        f"Une nouvelle commande a été enregistrée avec succès.\n\n"
+        f"DÉTAILS DU CLIENT :\n"
+        f"-------------------\n"
+        f"Référence Commande : {order.reference}\n"
+        f"Client : {order.first_name} {order.last_name}\n"
+        f"Numéro WhatsApp : {order.whatsapp_number}\n"
+        f"Adresse de livraison : {order.address}\n"
+        f"Mode de livraison : {order.get_delivery_method_display() if hasattr(order, 'get_delivery_method_display') else order.delivery_method}\n"
+        f"Moyen de paiement : {order.get_payment_method_display() if hasattr(order, 'get_payment_method_display') else order.payment_method}\n\n"
+        f"PRODUITS COMMANDÉS :\n"
+        f"--------------------\n"
+    )
+    for item in order.items.all():
+        body += f"- {item.product.name} x {item.quantity} ({item.unit_price} FCFA)\n"
+    
+    body += (
+        f"\n--------------------\n"
+        f"Sous-total : {order.total_amount - order.shipping_fees} FCFA\n"
+        f"Frais de livraison : {order.shipping_fees} FCFA\n"
+        f"Montant Total : {order.total_amount} FCFA\n"
+    )
+    try:
+        send_mail(
+            subject=subject,
+            message=body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[settings.ORDER_NOTIFICATION_EMAIL],
+            fail_silently=False,
+        )
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Erreur envoi email commande {order.reference}: {e}")
+
+def _send_contact_email(msg):
+    subject = f"[GalsenArduino] Nouveau Message de Contact - {msg.name}"
+    body = (
+        f"Vous avez reçu un nouveau message de contact depuis le site GalsenArduino.\n\n"
+        f"DÉTAILS DU MESSAGE :\n"
+        f"--------------------\n"
+        f"Nom : {msg.name}\n"
+        f"Email : {msg.email}\n"
+        f"WhatsApp : {msg.whatsapp}\n\n"
+        f"Message :\n"
+        f"{msg.message}\n"
+    )
+    try:
+        send_mail(
+            subject=subject,
+            message=body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[settings.CONTACT_EMAIL],
+            fail_silently=False,
+        )
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Erreur envoi email contact: {e}")
 
 def home(request):
     categories = Category.objects.all()
@@ -216,6 +279,9 @@ def checkout(request):
                 # 4. Si tout s'est bien passé, on vide le panier
                 _save_cart(request.session, {})
 
+                # 5. Envoi de l'e-mail de notification à l'administrateur
+                _send_order_email(order)
+
                 messages.success(
                     request,
                     f"Votre commande a été enregistrée avec succès. Référence : {order.reference}",
@@ -243,7 +309,8 @@ def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.save()
+            contact_msg = form.save()
+            _send_contact_email(contact_msg)
             messages.success(request, "Votre message a bien été envoyé !")
             return redirect("shop:contact")
     else:
